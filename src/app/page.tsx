@@ -1,4 +1,3 @@
-import Image from "next/image";
 import {
   ArrowRight,
   BadgeCheck,
@@ -253,13 +252,11 @@ export default function Home() {
                 data-float
                 className="absolute inset-0 overflow-hidden rounded-md border-4 border-neutral-950 bg-neutral-200 shadow-[10px_10px_0_#111]"
               >
-                <Image
+                <PictureImage
                   src="/assets/jrw-maker-pop-up-photo.webp"
+                  fallbackSrc="/assets/jrw-maker-pop-up-photo.jpg"
                   alt="Original JRW maker pop-up scene with people collaborating around tools and creative hardware"
-                  fill
                   priority
-                  unoptimized
-                  sizes="(min-width: 1024px) 28vw, (min-width: 640px) 50vw, 100vw"
                   className="object-cover"
                 />
               </div>
@@ -270,12 +267,10 @@ export default function Home() {
                   data-float
                   className="absolute inset-0 overflow-hidden rounded-md border-4 border-neutral-950 bg-white shadow-[10px_10px_0_#0f766e]"
                 >
-                  <Image
+                  <PictureImage
                     src="/assets/jrw-tech-workbench-photo.webp"
+                    fallbackSrc="/assets/jrw-tech-workbench-photo.jpg"
                     alt="Original JRW home tech workbench with servers, speakers, cabling, and calibration tools"
-                    fill
-                    unoptimized
-                    sizes="(min-width: 1024px) 34vw, (min-width: 640px) 80vw, 100vw"
                     className="object-cover"
                   />
                   <div className="absolute inset-x-0 bottom-0 bg-neutral-950/90 p-4 text-white">
@@ -293,12 +288,10 @@ export default function Home() {
                   data-float
                   className="absolute inset-0 overflow-hidden rounded-md border-4 border-neutral-950 bg-amber-300 shadow-[10px_10px_0_#e11d48]"
                 >
-                  <Image
+                  <PictureImage
                     src="/assets/jrw-makerspace-interior-photo.webp"
+                    fallbackSrc="/assets/jrw-makerspace-interior-photo.jpg"
                     alt="Original JRW future makerspace interior with workshop tables, tools, and community seating"
-                    fill
-                    unoptimized
-                    sizes="(min-width: 1024px) 32vw, (min-width: 640px) 86vw, 100vw"
                     className="object-cover"
                   />
                   <div className="absolute left-4 top-4 max-w-[calc(100%-2rem)] rounded-md bg-amber-300 p-4 text-neutral-950 shadow-[6px_6px_0_#111] sm:max-w-56">
@@ -428,12 +421,10 @@ export default function Home() {
             </p>
           </div>
           <div className="relative min-h-80 overflow-hidden rounded-md border-4 border-white bg-neutral-800 shadow-[12px_12px_0_#f59e0b]">
-            <Image
+            <PictureImage
               src="/assets/jrw-storefront-photo.webp"
+              fallbackSrc="/assets/jrw-storefront-photo.jpg"
               alt="Original JRW storefront concept showing a welcoming maker shop interior through the front windows"
-              fill
-              unoptimized
-              sizes="(min-width: 1024px) 46vw, 90vw"
               className="object-cover opacity-90"
             />
           </div>
@@ -447,22 +438,18 @@ export default function Home() {
         >
           <div className="relative min-h-[520px]" data-reveal-left>
             <div className="absolute left-0 top-0 h-72 w-[72%] overflow-hidden rounded-md border-4 border-neutral-950 bg-white shadow-[10px_10px_0_#111]">
-              <Image
+              <PictureImage
                 src="/assets/jrw-maker-pop-up-photo.webp"
+                fallbackSrc="/assets/jrw-maker-pop-up-photo.jpg"
                 alt="Original JRW community pop-up scene for welcoming local events"
-                fill
-                unoptimized
-                sizes="(min-width: 1024px) 38vw, 88vw"
                 className="object-cover"
               />
             </div>
             <div className="absolute bottom-4 right-0 h-72 w-[70%] overflow-hidden rounded-md border-4 border-neutral-950 bg-white shadow-[10px_10px_0_#0f766e]">
-              <Image
+              <PictureImage
                 src="/assets/jrw-makerspace-interior-photo.webp"
+                fallbackSrc="/assets/jrw-makerspace-interior-photo.jpg"
                 alt="Original JRW makerspace interior concept with tools, seating, and workshop tables"
-                fill
-                unoptimized
-                sizes="(min-width: 1024px) 36vw, 82vw"
                 className="object-cover"
               />
             </div>
@@ -808,5 +795,33 @@ function FeaturePanel({
         {foot}
       </p>
     </article>
+  );
+}
+
+function PictureImage({
+  src,
+  fallbackSrc,
+  alt,
+  className,
+  priority = false,
+}: {
+  src: string;
+  fallbackSrc: string;
+  alt: string;
+  className?: string;
+  priority?: boolean;
+}) {
+  return (
+    <picture>
+      <source srcSet={src} type="image/webp" />
+      <img
+        src={fallbackSrc}
+        alt={alt}
+        loading={priority ? "eager" : "lazy"}
+        decoding={priority ? "sync" : "async"}
+        fetchPriority={priority ? "high" : "auto"}
+        className={`absolute inset-0 h-full w-full ${className ?? ""}`}
+      />
+    </picture>
   );
 }
