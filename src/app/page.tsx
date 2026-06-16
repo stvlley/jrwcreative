@@ -138,9 +138,9 @@ export default function Home() {
           data-scroll-progress
           className="absolute inset-x-0 top-0 h-1 origin-left bg-rose-600"
         />
-        <div className="mx-auto flex max-w-7xl items-center justify-between gap-6 px-5 py-4 sm:px-8">
+        <div className="mx-auto flex max-w-7xl items-center justify-between gap-3 px-4 py-3 sm:gap-6 sm:px-8 sm:py-4">
           <a href="#top" className="flex items-center gap-3 font-black uppercase tracking-wide">
-            <span className="grid size-10 place-items-center rounded-md bg-neutral-950 text-lg text-white">
+            <span className="grid size-10 shrink-0 place-items-center rounded-md bg-neutral-950 text-lg text-white">
               JRW
             </span>
             <span className="hidden text-sm leading-tight sm:block">
@@ -165,12 +165,27 @@ export default function Home() {
             <a
               href="#contact"
               data-button
-              className="hidden h-11 items-center justify-center rounded-md bg-rose-600 px-4 text-sm font-black uppercase tracking-wide text-white transition hover:bg-rose-700 sm:inline-flex"
+              className="inline-flex h-11 items-center justify-center rounded-md bg-rose-600 px-3 text-xs font-black uppercase tracking-wide text-white transition hover:bg-rose-700 sm:px-4 sm:text-sm"
             >
-              Get a quote
+              <span className="sm:hidden">Quote</span>
+              <span className="hidden sm:inline">Get a quote</span>
             </a>
           </div>
         </div>
+        <nav
+          aria-label="Mobile section navigation"
+          className="flex gap-2 overflow-x-auto border-t border-neutral-950/10 px-4 py-2 md:hidden"
+        >
+          {navItems.map(([label, href]) => (
+            <a
+              key={href}
+              href={href}
+              className="shrink-0 rounded-md border border-neutral-950/15 bg-white px-3 py-2 text-xs font-black uppercase tracking-wide text-neutral-800"
+            >
+              {label}
+            </a>
+          ))}
+        </nav>
       </header>
 
       <section
@@ -229,11 +244,11 @@ export default function Home() {
             </div>
           </div>
 
-          <div className="relative grid min-h-[620px] gap-4 sm:grid-cols-[0.82fr_1.18fr] lg:translate-y-8" data-hero-visual data-reveal-right>
+          <div className="relative grid gap-4 sm:min-h-[620px] sm:grid-cols-[0.82fr_1.18fr] lg:translate-y-8" data-hero-visual data-reveal-right>
             <p className="absolute -right-4 top-4 z-20 hidden max-w-32 rotate-3 rounded-md bg-rose-600 px-3 py-2 text-center font-mono text-xs font-black uppercase text-white shadow-[6px_6px_0_#111] lg:block">
               come as you are
             </p>
-            <div data-hero-card data-parallax="slow" className="relative aspect-[4/5] self-end">
+            <div data-hero-card data-parallax="slow" className="relative min-h-80 self-end sm:aspect-[4/5] sm:min-h-0">
               <div
                 data-float
                 className="absolute inset-0 overflow-hidden rounded-md border-4 border-neutral-950 bg-neutral-200 shadow-[10px_10px_0_#111]"
@@ -243,13 +258,14 @@ export default function Home() {
                   alt="Original JRW maker pop-up scene with people collaborating around tools and creative hardware"
                   fill
                   priority
-                  sizes="(min-width: 1024px) 28vw, 50vw"
+                  unoptimized
+                  sizes="(min-width: 1024px) 28vw, (min-width: 640px) 50vw, 100vw"
                   className="object-cover"
                 />
               </div>
             </div>
             <div className="grid gap-4">
-              <div data-hero-card className="relative min-h-60">
+              <div data-hero-card className="relative min-h-72 sm:min-h-60">
                 <div
                   data-float
                   className="absolute inset-0 overflow-hidden rounded-md border-4 border-neutral-950 bg-white shadow-[10px_10px_0_#0f766e]"
@@ -258,7 +274,8 @@ export default function Home() {
                     src="/assets/jrw-tech-workbench-photo.webp"
                     alt="Original JRW home tech workbench with servers, speakers, cabling, and calibration tools"
                     fill
-                    sizes="(min-width: 1024px) 34vw, 80vw"
+                    unoptimized
+                    sizes="(min-width: 1024px) 34vw, (min-width: 640px) 80vw, 100vw"
                     className="object-cover"
                   />
                   <div className="absolute inset-x-0 bottom-0 bg-neutral-950/90 p-4 text-white">
@@ -270,7 +287,7 @@ export default function Home() {
               <div
                 data-hero-card
                 data-parallax="fast"
-                className="relative -ml-8 min-h-72 sm:ml-0 lg:-ml-12"
+                className="relative min-h-80 sm:ml-0 sm:min-h-72 lg:-ml-12"
               >
                 <div
                   data-float
@@ -280,10 +297,11 @@ export default function Home() {
                     src="/assets/jrw-makerspace-interior-photo.webp"
                     alt="Original JRW future makerspace interior with workshop tables, tools, and community seating"
                     fill
-                    sizes="(min-width: 1024px) 32vw, 86vw"
+                    unoptimized
+                    sizes="(min-width: 1024px) 32vw, (min-width: 640px) 86vw, 100vw"
                     className="object-cover"
                   />
-                  <div className="absolute left-4 top-4 max-w-56 rounded-md bg-amber-300 p-4 text-neutral-950 shadow-[6px_6px_0_#111]">
+                  <div className="absolute left-4 top-4 max-w-[calc(100%-2rem)] rounded-md bg-amber-300 p-4 text-neutral-950 shadow-[6px_6px_0_#111] sm:max-w-56">
                     <p className="font-mono text-xs uppercase">Work + culture + useful gear</p>
                     <p className="mt-2 text-2xl font-black leading-tight">Empowerment is the brand spine.</p>
                   </div>
@@ -414,6 +432,7 @@ export default function Home() {
               src="/assets/jrw-storefront-photo.webp"
               alt="Original JRW storefront concept showing a welcoming maker shop interior through the front windows"
               fill
+              unoptimized
               sizes="(min-width: 1024px) 46vw, 90vw"
               className="object-cover opacity-90"
             />
@@ -432,6 +451,7 @@ export default function Home() {
                 src="/assets/jrw-maker-pop-up-photo.webp"
                 alt="Original JRW community pop-up scene for welcoming local events"
                 fill
+                unoptimized
                 sizes="(min-width: 1024px) 38vw, 88vw"
                 className="object-cover"
               />
@@ -441,6 +461,7 @@ export default function Home() {
                 src="/assets/jrw-makerspace-interior-photo.webp"
                 alt="Original JRW makerspace interior concept with tools, seating, and workshop tables"
                 fill
+                unoptimized
                 sizes="(min-width: 1024px) 36vw, 82vw"
                 className="object-cover"
               />
