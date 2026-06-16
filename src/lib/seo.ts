@@ -1,4 +1,23 @@
-export const siteUrl = "https://jrwcreativegroup.com";
+export const defaultSiteUrl = "https://jrwcreative.group";
+
+const localhostPattern = /^(localhost|127\.0\.0\.1|\[::1\])(?::\d+)?$/;
+
+export function resolveSiteUrl(host?: string | null, protocol = "https") {
+  const explicitUrl = process.env.NEXT_PUBLIC_SITE_URL ?? process.env.SITE_URL;
+  const vercelUrl =
+    process.env.VERCEL_PROJECT_PRODUCTION_URL ?? process.env.VERCEL_URL;
+  const candidate = host ?? explicitUrl ?? vercelUrl ?? defaultSiteUrl;
+
+  if (/^https?:\/\//i.test(candidate)) {
+    return candidate.replace(/\/+$/, "");
+  }
+
+  const resolvedProtocol = localhostPattern.test(candidate) ? protocol : "https";
+
+  return `${resolvedProtocol}://${candidate}`.replace(/\/+$/, "");
+}
+
+export const siteUrl = resolveSiteUrl();
 
 export const siteName = "JRW Creative Group LLC";
 
@@ -30,4 +49,8 @@ export const seoKeywords = [
   "neurodivergent friendly workshops",
 ];
 
-export const primaryImage = `${siteUrl}/assets/jrw-maker-pop-up-photo.webp`;
+export function resolvePrimaryImage(baseUrl = siteUrl) {
+  return `${baseUrl}/assets/jrw-maker-pop-up-photo.webp`;
+}
+
+export const primaryImage = resolvePrimaryImage(siteUrl);

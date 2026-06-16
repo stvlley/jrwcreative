@@ -37,11 +37,17 @@ export function AccessibilityToggle() {
   const [enabled, setEnabled] = useState(false);
 
   useEffect(() => {
-    const initialValue = isAccessibilityModeEnabled();
-    setAccessibilityMode(initialValue);
+    const motionPreference = window.matchMedia("(prefers-reduced-motion: reduce)");
+    const syncMode = () => {
+      const value = isAccessibilityModeEnabled();
+      setAccessibilityMode(value);
+      setEnabled(value);
+    };
 
-    const updateTimer = window.setTimeout(() => setEnabled(initialValue), 0);
-    return () => window.clearTimeout(updateTimer);
+    syncMode();
+    motionPreference.addEventListener("change", syncMode);
+
+    return () => motionPreference.removeEventListener("change", syncMode);
   }, []);
 
   const toggleMode = () => {

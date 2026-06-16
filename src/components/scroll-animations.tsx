@@ -77,8 +77,12 @@ export function ScrollAnimations() {
           },
         });
 
+        const heroCopy = gsap.utils.toArray<HTMLElement>("[data-hero-copy] > *");
+        const heroCards = gsap.utils.toArray<HTMLElement>("[data-hero-card]");
+        const heroFloats = gsap.utils.toArray<HTMLElement>("[data-float]");
+
         gsap.fromTo(
-          "[data-hero-copy] > *",
+          heroCopy,
           { autoAlpha: 0, x: -24, y: 20 },
           {
             autoAlpha: 1,
@@ -87,12 +91,13 @@ export function ScrollAnimations() {
             duration: 0.75,
             stagger: 0.08,
             ease: "power3.out",
+            overwrite: "auto",
             clearProps: "transform",
           },
         );
 
         gsap.fromTo(
-          "[data-hero-card]",
+          heroCards,
           { autoAlpha: 0, x: 28, y: 36, rotate: -1.5 },
           {
             autoAlpha: 1,
@@ -103,19 +108,22 @@ export function ScrollAnimations() {
             stagger: 0.1,
             delay: 0.12,
             ease: "power3.out",
+            overwrite: "auto",
             clearProps: "transform",
+            onComplete: () => {
+              gsap.to(heroFloats, {
+                y: -8,
+                duration: 2.8,
+                repeat: -1,
+                yoyo: true,
+                ease: "sine.inOut",
+                stagger: 0.18,
+                force3D: true,
+                overwrite: "auto",
+              });
+            },
           },
         );
-
-        gsap.to("[data-float]", {
-          y: -8,
-          duration: 2.8,
-          repeat: -1,
-          yoyo: true,
-          ease: "sine.inOut",
-          stagger: 0.18,
-          force3D: true,
-        });
 
         gsap.utils.toArray<HTMLElement>("[data-reveal]").forEach((element) => {
           gsap.fromTo(

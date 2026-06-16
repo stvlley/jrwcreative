@@ -195,7 +195,7 @@ export default function Home() {
       >
         <div className="absolute inset-x-0 top-0 h-3 bg-[linear-gradient(90deg,#111_0_25%,#0f766e_25%_50%,#e11d48_50%_75%,#f59e0b_75%_100%)]" />
         <div className="mx-auto grid max-w-7xl gap-10 px-5 pb-16 pt-12 sm:px-8 lg:grid-cols-[0.9fr_1.1fr] lg:items-end lg:pb-20 lg:pt-20">
-          <div className="max-w-3xl" data-hero-copy data-reveal-left>
+          <div className="max-w-3xl" data-hero-copy>
             <p
               data-physics-collider
               className="mb-5 inline-flex rounded-md border border-neutral-950/20 bg-white px-3 py-2 text-xs font-black uppercase tracking-wide text-neutral-700 shadow-[4px_4px_0_#f59e0b]"
@@ -243,11 +243,11 @@ export default function Home() {
             </div>
           </div>
 
-          <div className="relative grid gap-4 sm:min-h-[620px] sm:grid-cols-[0.82fr_1.18fr] lg:translate-y-8" data-hero-visual data-reveal-right>
+          <div className="relative grid gap-4 sm:min-h-[620px] sm:grid-cols-[0.82fr_1.18fr] lg:translate-y-8" data-hero-visual>
             <p className="absolute -right-4 top-4 z-20 hidden max-w-32 rotate-3 rounded-md bg-rose-600 px-3 py-2 text-center font-mono text-xs font-black uppercase text-white shadow-[6px_6px_0_#111] lg:block">
               come as you are
             </p>
-            <div data-hero-card data-parallax="slow" className="relative min-h-80 self-end sm:aspect-[4/5] sm:min-h-0">
+            <div data-hero-card className="relative min-h-80 self-end sm:aspect-[4/5] sm:min-h-0">
               <div
                 data-float
                 className="absolute inset-0 overflow-hidden rounded-md border-4 border-neutral-950 bg-neutral-200 shadow-[10px_10px_0_#111]"
@@ -271,6 +271,7 @@ export default function Home() {
                     src="/assets/jrw-tech-workbench-photo.webp"
                     fallbackSrc="/assets/jrw-tech-workbench-photo.jpg"
                     alt="Original JRW home tech workbench with servers, speakers, cabling, and calibration tools"
+                    priority
                     className="object-cover"
                   />
                   <div className="absolute inset-x-0 bottom-0 bg-neutral-950/90 p-4 text-white">
@@ -281,7 +282,6 @@ export default function Home() {
               </div>
               <div
                 data-hero-card
-                data-parallax="fast"
                 className="relative min-h-80 sm:ml-0 sm:min-h-72 lg:-ml-12"
               >
                 <div
@@ -292,6 +292,7 @@ export default function Home() {
                     src="/assets/jrw-makerspace-interior-photo.webp"
                     fallbackSrc="/assets/jrw-makerspace-interior-photo.jpg"
                     alt="Original JRW future makerspace interior with workshop tables, tools, and community seating"
+                    priority
                     className="object-cover"
                   />
                   <div className="absolute left-4 top-4 max-w-[calc(100%-2rem)] rounded-md bg-amber-300 p-4 text-neutral-950 shadow-[6px_6px_0_#111] sm:max-w-56">
