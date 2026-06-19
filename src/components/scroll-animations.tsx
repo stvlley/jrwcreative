@@ -61,6 +61,8 @@ export function ScrollAnimations() {
       const cleanupHandlers: Array<() => void> = [];
 
       const context = gsap.context(() => {
+        const sideRevealOffset = window.matchMedia("(max-width: 767px)").matches ? 18 : 52;
+
         gsap.set("[data-scroll-progress]", {
           scaleX: 0,
           transformOrigin: "left center",
@@ -147,7 +149,7 @@ export function ScrollAnimations() {
         gsap.utils.toArray<HTMLElement>("[data-reveal-left]").forEach((element) => {
           gsap.fromTo(
             element,
-            { autoAlpha: 0, x: -52 },
+            { autoAlpha: 0, x: -sideRevealOffset },
             {
               autoAlpha: 1,
               x: 0,
@@ -166,7 +168,7 @@ export function ScrollAnimations() {
         gsap.utils.toArray<HTMLElement>("[data-reveal-right]").forEach((element) => {
           gsap.fromTo(
             element,
-            { autoAlpha: 0, x: 52 },
+            { autoAlpha: 0, x: sideRevealOffset },
             {
               autoAlpha: 1,
               x: 0,

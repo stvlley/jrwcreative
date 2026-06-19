@@ -56,25 +56,25 @@ export function ContactForm() {
   }
 
   return (
-    <form className="grid gap-4" onSubmit={handleSubmit}>
+    <form className="grid gap-3 sm:gap-4" onSubmit={handleSubmit}>
       <div className="hidden" aria-hidden="true">
         <label htmlFor="company">Company</label>
         <input id="company" name="company" type="text" tabIndex={-1} autoComplete="off" />
       </div>
 
-      <div className="grid gap-4 sm:grid-cols-2">
+      <div className="grid gap-3 sm:grid-cols-2 sm:gap-4">
         <Field label="Name" name="name" autoComplete="name" required />
         <Field label="Email" name="email" type="email" autoComplete="email" required />
       </div>
 
-      <div className="grid gap-4 sm:grid-cols-2">
+      <div className="grid gap-3 sm:grid-cols-2 sm:gap-4">
         <Field label="Phone (optional)" name="phone" type="tel" autoComplete="tel" />
-        <label className="grid gap-2 text-sm font-semibold text-neutral-900">
+        <label className="grid gap-1.5 text-sm font-semibold text-neutral-900 sm:gap-2">
           Inquiry type
           <select
             name="inquiryType"
             required
-            className="h-12 rounded-md border border-neutral-300 bg-white px-3 text-base font-normal text-neutral-950 outline-none transition focus:border-neutral-950 focus:ring-4 focus:ring-amber-200"
+            className="h-11 rounded-md border border-neutral-300 bg-white px-3 text-base font-normal text-neutral-950 outline-none transition focus:border-neutral-950 focus:ring-4 focus:ring-amber-200 sm:h-12"
             defaultValue=""
           >
             <option value="" disabled>
@@ -90,25 +90,25 @@ export function ContactForm() {
         </label>
       </div>
 
-      <label className="grid gap-2 text-sm font-semibold text-neutral-900">
+      <label className="grid gap-1.5 text-sm font-semibold text-neutral-900 sm:gap-2">
         Project file or link (optional)
         <input
           name="projectLink"
           type="url"
           inputMode="url"
-          placeholder="For 3D print files, references, or project notes"
-          className="h-12 rounded-md border border-neutral-300 bg-white px-3 text-base font-normal text-neutral-950 outline-none transition placeholder:text-neutral-500 focus:border-neutral-950 focus:ring-4 focus:ring-amber-200"
+          placeholder="Paste a file link or project notes"
+          className="h-11 rounded-md border border-neutral-300 bg-white px-3 text-base font-normal text-neutral-950 outline-none transition placeholder:text-neutral-500 focus:border-neutral-950 focus:ring-4 focus:ring-amber-200 sm:h-12"
         />
       </label>
 
-      <label className="grid gap-2 text-sm font-semibold text-neutral-900">
+      <label className="grid gap-1.5 text-sm font-semibold text-neutral-900 sm:gap-2">
         Message
         <textarea
           name="message"
           required
-          rows={5}
+          rows={4}
           placeholder="Tell us what you want to build, fix, host, print, or learn."
-          className="min-h-36 rounded-md border border-neutral-300 bg-white px-3 py-3 text-base font-normal text-neutral-950 outline-none transition placeholder:text-neutral-500 focus:border-neutral-950 focus:ring-4 focus:ring-amber-200"
+          className="min-h-28 rounded-md border border-neutral-300 bg-white px-3 py-2.5 text-base font-normal text-neutral-950 outline-none transition placeholder:text-neutral-500 focus:border-neutral-950 focus:ring-4 focus:ring-amber-200 sm:min-h-36 sm:py-3"
         />
       </label>
 
@@ -127,9 +127,8 @@ export function ContactForm() {
 
       <button
         type="submit"
-        data-button
         disabled={isSubmitting}
-        className="inline-flex h-12 items-center justify-center gap-2 rounded-md bg-neutral-950 px-5 text-sm font-bold uppercase tracking-wide text-white transition hover:bg-neutral-800 focus:outline-none focus:ring-4 focus:ring-amber-300 disabled:cursor-not-allowed disabled:bg-neutral-500"
+        className="inline-flex min-h-11 items-center justify-center gap-2 rounded-md bg-neutral-950 px-3 py-2.5 text-center text-xs font-bold uppercase leading-snug tracking-wide text-white transition hover:bg-neutral-800 focus:outline-none focus:ring-4 focus:ring-amber-300 disabled:cursor-not-allowed disabled:bg-neutral-500 sm:min-h-12 sm:px-5 sm:py-3 sm:text-sm"
       >
         <Send aria-hidden="true" size={18} />
         {isSubmitting ? "Sending" : "Request a free consultation / quote"}
@@ -152,14 +151,14 @@ function Field({
   autoComplete?: string;
 }) {
   return (
-    <label className="grid gap-2 text-sm font-semibold text-neutral-900">
+    <label className="grid gap-1.5 text-sm font-semibold text-neutral-900 sm:gap-2">
       {label}
       <input
         name={name}
         type={type}
         required={required}
         autoComplete={autoComplete}
-        className="h-12 rounded-md border border-neutral-300 bg-white px-3 text-base font-normal text-neutral-950 outline-none transition focus:border-neutral-950 focus:ring-4 focus:ring-amber-200"
+        className="h-11 rounded-md border border-neutral-300 bg-white px-3 text-base font-normal text-neutral-950 outline-none transition focus:border-neutral-950 focus:ring-4 focus:ring-amber-200 sm:h-12"
       />
     </label>
   );

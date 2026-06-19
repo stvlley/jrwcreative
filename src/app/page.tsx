@@ -148,7 +148,7 @@ export default function Home() {
               <span className="text-teal-700">The Swap</span>
             </span>
           </a>
-          <nav aria-label="Main navigation" className="hidden items-center gap-5 md:flex">
+          <nav aria-label="Main navigation" className="hidden items-center gap-5 lg:flex">
             {navItems.map(([label, href]) => (
               <a
                 key={href}
@@ -173,7 +173,7 @@ export default function Home() {
         </div>
         <nav
           aria-label="Mobile section navigation"
-          className="flex gap-2 overflow-x-auto border-t border-neutral-950/10 px-4 py-2 md:hidden"
+          className="flex gap-2 overflow-x-auto border-t border-neutral-950/10 px-4 py-2 lg:hidden"
         >
           {navItems.map(([label, href]) => (
             <a
@@ -205,7 +205,7 @@ export default function Home() {
             <h1
               id="hero-title"
               data-physics-collider
-              className="max-w-4xl text-5xl font-black leading-[0.92] tracking-normal text-neutral-950 sm:text-7xl lg:text-8xl"
+              className="max-w-4xl text-4xl font-black leading-[0.94] tracking-normal text-neutral-950 min-[380px]:text-5xl sm:text-7xl lg:text-8xl"
             >
               Work with the gear. Leave with the confidence.
             </h1>
@@ -247,7 +247,7 @@ export default function Home() {
             <p className="absolute -right-4 top-4 z-20 hidden max-w-32 rotate-3 rounded-md bg-rose-600 px-3 py-2 text-center font-mono text-xs font-black uppercase text-white shadow-[6px_6px_0_#111] lg:block">
               come as you are
             </p>
-            <div data-hero-card className="relative min-h-80 self-end sm:aspect-[4/5] sm:min-h-0">
+            <div data-hero-card className="relative min-h-64 self-end sm:aspect-[4/5] sm:min-h-0">
               <div
                 data-float
                 className="absolute inset-0 overflow-hidden rounded-md border-4 border-neutral-950 bg-neutral-200 shadow-[10px_10px_0_#111]"
@@ -262,7 +262,7 @@ export default function Home() {
               </div>
             </div>
             <div className="grid gap-4">
-              <div data-hero-card className="relative min-h-72 sm:min-h-60">
+              <div data-hero-card className="relative min-h-56 sm:min-h-60">
                 <div
                   data-float
                   className="absolute inset-0 overflow-hidden rounded-md border-4 border-neutral-950 bg-white shadow-[10px_10px_0_#0f766e]"
@@ -276,13 +276,13 @@ export default function Home() {
                   />
                   <div className="absolute inset-x-0 bottom-0 bg-neutral-950/90 p-4 text-white">
                     <p className="font-mono text-xs uppercase text-amber-300">The Swap makes room for</p>
-                    <p className="mt-1 text-2xl font-black leading-tight">prints, repairs, local AI, and the people figuring it out.</p>
+                    <p className="mt-1 text-xl font-black leading-tight sm:text-2xl">prints, repairs, local AI, and the people figuring it out.</p>
                   </div>
                 </div>
               </div>
               <div
                 data-hero-card
-                className="relative min-h-80 sm:ml-0 sm:min-h-72 lg:-ml-12"
+                className="relative min-h-60 sm:ml-0 sm:min-h-72 lg:-ml-12"
               >
                 <div
                   data-float
@@ -297,7 +297,7 @@ export default function Home() {
                   />
                   <div className="absolute left-4 top-4 max-w-[calc(100%-2rem)] rounded-md bg-amber-300 p-4 text-neutral-950 shadow-[6px_6px_0_#111] sm:max-w-56">
                     <p className="font-mono text-xs uppercase">Work + culture + useful gear</p>
-                    <p className="mt-2 text-2xl font-black leading-tight">Empowerment is the brand spine.</p>
+                    <p className="mt-2 text-xl font-black leading-tight sm:text-2xl">Empowerment is the brand spine.</p>
                   </div>
                 </div>
               </div>
@@ -326,7 +326,7 @@ export default function Home() {
         >
           <div data-reveal-left>
             <p className="eyebrow-dark">Borrowed signal, JRW voice</p>
-            <h2 className="max-w-3xl text-4xl font-black leading-tight sm:text-6xl">
+            <h2 className="max-w-3xl text-3xl font-black leading-tight sm:text-6xl">
               The site should feel less like a brochure and more like walking into the right room.
             </h2>
           </div>
@@ -414,14 +414,14 @@ export default function Home() {
         >
           <div>
             <p className="eyebrow-dark">The Swap</p>
-            <h2 className="text-4xl font-black leading-tight sm:text-6xl">A pop-up home for making, fixing, printing, and finding your people.</h2>
+            <h2 className="text-3xl font-black leading-tight sm:text-6xl">A pop-up home for making, fixing, printing, and finding your people.</h2>
             <p className="mt-6 text-lg leading-8 text-neutral-300">
               The Swap is the community side of JRW: monthly events, donation-based
               entry while the model grows, print-for-hire work, workshops, and a
               future brick-and-mortar makerspace when the timing is right.
             </p>
           </div>
-          <div className="relative min-h-80 overflow-hidden rounded-md border-4 border-white bg-neutral-800 shadow-[12px_12px_0_#f59e0b]">
+          <div className="relative min-h-64 overflow-hidden rounded-md border-4 border-white bg-neutral-800 shadow-[8px_8px_0_#f59e0b] sm:min-h-80 sm:shadow-[12px_12px_0_#f59e0b]">
             <PictureImage
               src="/assets/jrw-storefront-photo.webp"
               fallbackSrc="/assets/jrw-storefront-photo.jpg"
@@ -437,8 +437,8 @@ export default function Home() {
           data-reveal
           className="mx-auto grid max-w-7xl gap-10 px-5 py-16 sm:px-8 lg:grid-cols-[0.9fr_1.1fr] lg:items-center lg:py-24"
         >
-          <div className="relative min-h-[520px]" data-reveal-left>
-            <div className="absolute left-0 top-0 h-72 w-[72%] overflow-hidden rounded-md border-4 border-neutral-950 bg-white shadow-[10px_10px_0_#111]">
+          <div className="relative min-h-[390px] sm:min-h-[520px]" data-reveal-left>
+            <div className="absolute left-0 top-0 h-56 w-[72%] overflow-hidden rounded-md border-4 border-neutral-950 bg-white shadow-[8px_8px_0_#111] sm:h-72 sm:shadow-[10px_10px_0_#111]">
               <PictureImage
                 src="/assets/jrw-maker-pop-up-photo.webp"
                 fallbackSrc="/assets/jrw-maker-pop-up-photo.jpg"
@@ -446,7 +446,7 @@ export default function Home() {
                 className="object-cover"
               />
             </div>
-            <div className="absolute bottom-4 right-0 h-72 w-[70%] overflow-hidden rounded-md border-4 border-neutral-950 bg-white shadow-[10px_10px_0_#0f766e]">
+            <div className="absolute bottom-4 right-0 h-56 w-[70%] overflow-hidden rounded-md border-4 border-neutral-950 bg-white shadow-[8px_8px_0_#0f766e] sm:h-72 sm:shadow-[10px_10px_0_#0f766e]">
               <PictureImage
                 src="/assets/jrw-makerspace-interior-photo.webp"
                 fallbackSrc="/assets/jrw-makerspace-interior-photo.jpg"
@@ -454,9 +454,9 @@ export default function Home() {
                 className="object-cover"
               />
             </div>
-            <div className="absolute left-6 top-60 max-w-64 rotate-[-2deg] rounded-md border-2 border-neutral-950 bg-amber-300 p-5 shadow-[7px_7px_0_#e11d48]">
+            <div className="absolute left-4 top-48 max-w-56 rotate-[-2deg] rounded-md border-2 border-neutral-950 bg-amber-300 p-4 shadow-[6px_6px_0_#e11d48] sm:left-6 sm:top-60 sm:max-w-64 sm:p-5 sm:shadow-[7px_7px_0_#e11d48]">
               <Coffee aria-hidden="true" size={24} />
-              <p className="mt-3 text-2xl font-black leading-tight">Pretty helps. Productive matters more.</p>
+              <p className="mt-3 text-xl font-black leading-tight sm:text-2xl">Pretty helps. Productive matters more.</p>
             </div>
           </div>
           <div data-reveal-right>
@@ -568,7 +568,7 @@ export default function Home() {
         >
           <div data-reveal-left>
             <p className="eyebrow-dark">Future makerspace</p>
-            <h2 className="text-4xl font-black leading-tight sm:text-6xl">A permanent home is the long game.</h2>
+            <h2 className="text-3xl font-black leading-tight sm:text-6xl">A permanent home is the long game.</h2>
           </div>
           <div data-reveal-right data-detail-list>
             <p className="text-xl leading-9 text-teal-50">
@@ -623,7 +623,7 @@ export default function Home() {
         id="contact"
         data-physics-section="10"
         data-free-scroll
-        className="flex flex-col bg-[#f7f2ea]"
+        className="flex min-h-[calc(100svh-88px)] flex-col bg-[#f7f2ea]"
       >
         <div
           data-reveal
@@ -653,7 +653,7 @@ export default function Home() {
           <div
             data-card
             data-reveal-right
-            className="rounded-md border-4 border-neutral-950 bg-white p-5 shadow-[12px_12px_0_#111] sm:p-8"
+            className="min-w-0 rounded-md border-[3px] border-neutral-950 bg-white p-3 shadow-[4px_4px_0_#111] sm:border-4 sm:p-8 sm:shadow-[12px_12px_0_#111]"
           >
             <ContactForm />
           </div>

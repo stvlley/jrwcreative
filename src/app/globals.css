@@ -16,12 +16,12 @@ body {
   background: var(--background);
   color: var(--foreground);
   font-family: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
+  overflow-x: clip;
 }
 
 html {
   scroll-behavior: smooth;
   scroll-padding-top: 88px;
-  scroll-snap-type: y mandatory;
 }
 
 html[data-accessibility-mode="true"] {
@@ -68,15 +68,11 @@ html[data-accessibility-mode="true"] * {
 }
 
 [data-physics-section] {
-  min-height: calc(100svh - 88px);
-  scroll-snap-align: start;
-  scroll-snap-stop: always;
+  min-height: auto;
 }
 
 [data-free-scroll] {
   min-height: auto;
-  scroll-snap-align: start;
-  scroll-snap-stop: normal;
 }
 
 @keyframes marquee {
@@ -92,11 +88,6 @@ html[data-accessibility-mode="true"] * {
 @media (prefers-reduced-motion: reduce) {
   html {
     scroll-behavior: auto;
-    scroll-snap-type: none;
-  }
-
-  [data-physics-section] {
-    scroll-snap-align: none;
   }
 
   .marquee-track {
@@ -114,10 +105,20 @@ html[data-accessibility-mode="true"] * {
   }
 
   .section-title {
-    @apply mt-3 text-4xl font-black leading-tight tracking-normal text-neutral-950 sm:text-6xl;
+    @apply mt-3 text-3xl font-black leading-tight tracking-normal text-neutral-950 sm:text-6xl;
   }
 
   .service-card {
     @apply rounded-md border-2 border-neutral-950 bg-white p-5 shadow-[6px_6px_0_#111];
+  }
+}
+
+@media (max-width: 1023px) {
+  html {
+    scroll-padding-top: 116px;
+  }
+
+  [data-physics-section] {
+    min-height: auto !important;
   }
 }

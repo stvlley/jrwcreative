@@ -13,10 +13,12 @@ const blockColors = ["#e11d48", "#0f766e", "#f59e0b", "#111111", "#2563eb"];
 export function FallingBlocks() {
   const containerRef = useRef<HTMLDivElement>(null);
   const popRef = useRef<HTMLDivElement>(null);
-  const [disableMotion, setDisableMotion] = useState(() => isAccessibilityModeEnabled());
+  const [disableMotion, setDisableMotion] = useState(
+    () => isAccessibilityModeEnabled() || isMobileViewport(),
+  );
 
   useEffect(() => {
-    return onAccessibilityModeChange(setDisableMotion);
+    return onAccessibilityModeChange((enabled) => setDisableMotion(enabled || isMobileViewport()));
   }, []);
 
   useEffect(() => {
@@ -215,4 +217,8 @@ export function FallingBlocks() {
 
 function gsapButtonElements() {
   return Array.from(document.querySelectorAll<HTMLElement>("[data-button]"));
+}
+
+function isMobileViewport() {
+  return typeof window !== "undefined" && window.matchMedia("(max-width: 1023px)").matches;
 }
