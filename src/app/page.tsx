@@ -5,6 +5,7 @@ import {
   Coffee,
   Cpu,
   Home as HomeIcon,
+  Lock,
   Mail,
   MapPin,
   MonitorSpeaker,
@@ -488,7 +489,16 @@ export default async function Home() {
                 {contact.phone}
               </a>
             </div>
-            <p className="text-sm font-semibold text-neutral-400">{footer.legalLine}</p>
+            <div className="flex flex-col gap-2 text-sm font-semibold text-neutral-400 sm:items-end">
+              <p>{footer.legalLine}</p>
+              <a
+                href="/admin"
+                className="inline-flex items-center gap-1.5 text-xs uppercase tracking-wide text-neutral-500 transition hover:text-amber-300"
+              >
+                <Lock aria-hidden="true" size={14} />
+                Admin
+              </a>
+            </div>
           </div>
         </footer>
       </section>
