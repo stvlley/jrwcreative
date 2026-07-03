@@ -26,6 +26,13 @@ graphify-out/
 .env.*
 !.env.example
 
+# Local CMS content (dev fallback; prod uses Vercel Blob)
+.cms-content.json
+
+# The user's global gitignore ignores any `lib/` dir — keep this project's source lib tracked
+!src/lib/
+!src/lib/**
+
 # Logs
 *.log
 npm-debug.log*

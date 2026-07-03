@@ -8,12 +8,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
       lastModified: new Date("2026-06-16"),
       changeFrequency: "monthly",
       priority: 1,
-      images: [
-        primaryImage,
-        `${siteUrl}/assets/jrw-tech-workbench-photo.webp`,
-        `${siteUrl}/assets/jrw-makerspace-interior-photo.webp`,
-        `${siteUrl}/assets/jrw-storefront-photo.webp`,
-      ],
+      images: [primaryImage],
     },
   ];
 }

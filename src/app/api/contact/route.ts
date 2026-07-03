@@ -60,7 +60,7 @@ export async function POST(request: Request) {
 
   if (!to || !from) {
     return NextResponse.json(
-      { message: "Email is not configured yet. Please email JRW Creative Group directly." },
+      { message: "Email is not configured yet. Please email JRW TechWorks directly." },
       { status: 503 },
     );
   }
@@ -70,7 +70,7 @@ export async function POST(request: Request) {
       to,
       from,
       replyTo: email,
-      subject: `JRW Creative Group inquiry: ${inquiryType}`,
+      subject: `JRW TechWorks inquiry: ${inquiryType}`,
       text: [
         `Name: ${name}`,
         `Email: ${email}`,

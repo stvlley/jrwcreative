@@ -56,13 +56,13 @@ export async function generateMetadata(): Promise<Metadata> {
       type: "website",
       locale: "en_US",
       url: requestSiteUrl,
-      siteName: `${siteName} | The Swap`,
+      siteName,
       title: siteTitle,
       description: siteDescription,
       images: [
         {
           url: requestPrimaryImage,
-          alt: "JRW Creative Group maker pop-up with people collaborating around tools and creative hardware",
+          alt: "JRW TechWorks home tech workbench with servers, speakers, cabling, and calibration tools",
         },
       ],
     },
@@ -73,7 +73,7 @@ export async function generateMetadata(): Promise<Metadata> {
       images: [
         {
           url: requestPrimaryImage,
-          alt: "JRW Creative Group maker pop-up with people collaborating around tools and creative hardware",
+          alt: "JRW TechWorks home tech workbench with servers, speakers, cabling, and calibration tools",
         },
       ],
     },

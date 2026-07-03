@@ -3,8 +3,8 @@ import { siteDescription, siteName } from "@/lib/seo";
 
 export default function manifest(): MetadataRoute.Manifest {
   return {
-    name: `${siteName} | The Swap`,
-    short_name: "JRW Creative",
+    name: siteName,
+    short_name: "JRW TechWorks",
     description: siteDescription,
     start_url: "/",
     display: "standalone",

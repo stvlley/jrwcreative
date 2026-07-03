@@ -1,127 +1,52 @@
 import {
   ArrowRight,
   BadgeCheck,
-  Box,
   CalendarDays,
   Coffee,
   Cpu,
-  Hammer,
   Home as HomeIcon,
   Mail,
   MapPin,
   MonitorSpeaker,
   Phone,
-  Printer,
-  Quote,
   Sparkles,
   Wrench,
+  type LucideIcon,
 } from "lucide-react";
 import { AccessibilityToggle } from "@/components/accessibility-toggle";
 import { ContactForm } from "@/components/contact-form";
 import { FallingBlocks } from "@/components/falling-blocks";
 import { LoadingAnimation } from "@/components/loading-animation";
 import { ScrollAnimations } from "@/components/scroll-animations";
-import { events, printing, retroOfferings, workshops } from "@/content/site";
-import { homePageJsonLd, stringifyJsonLd } from "@/lib/json-ld";
+import { getContent } from "@/lib/content";
+import { buildHomePageJsonLd, stringifyJsonLd } from "@/lib/json-ld";
 
-const consultingServices = [
-  {
-    title: "Home theaters",
-    text: "Projector and screen design, calibration, room layout, acoustics, and source planning.",
-    icon: MonitorSpeaker,
-  },
-  {
-    title: "Studios",
-    text: "Audio and creative workspace builds that make recording, editing, streaming, and making easier to repeat.",
-    icon: Sparkles,
-  },
-  {
-    title: "A/V routing",
-    text: "Whole-system signal routing, integration, source cleanup, and practical control paths.",
-    icon: Cpu,
-  },
-  {
-    title: "In-home servers",
-    text: "Local LLM setups, voice-ready AI options, NAS storage, backup plans, ZFS arrays, and media servers.",
-    icon: HomeIcon,
-  },
-  {
-    title: "Retro setups",
-    text: "Aesthetic design, rare hardware sourcing, restoration, customization, and quality-focused console builds.",
-    icon: Wrench,
-  },
-];
+const serviceIcons: Record<string, LucideIcon> = {
+  "home-theater": MonitorSpeaker,
+  studios: Sparkles,
+  "av-routing": Cpu,
+  servers: HomeIcon,
+  retro: Wrench,
+};
 
-const navItems = [
-  ["Consulting", "#consulting"],
-  ["The Swap", "#swap"],
-  ["Events", "#events"],
-  ["Workshops", "#workshops"],
+const navItems: [string, string][] = [
+  ["Services", "#consulting"],
+  ["Approach", "#approach"],
+  ["Why us", "#why"],
+  ["FAQ", "#faq"],
   ["Contact", "#contact"],
 ];
 
-const proofSignals = [
-  "No-gatekeeping workshops",
-  "Real rooms, real hardware",
-  "Repair culture",
-  "Local-first pop-ups",
-  "Comfortable enough to ask",
-];
+export default async function Home() {
+  const content = await getContent();
+  const { hero, proofSignals, intro, approach, consulting, proof, spotlights, cta, faq, contact, footer } =
+    content;
 
-const memberQuotes = [
-  {
-    quote:
-      "A place where the first question is what are you trying to make, not what do you already know.",
-    source: "The Swap community promise",
-  },
-  {
-    quote:
-      "Useful tech should feel like a good neighborhood shop: direct, warm, and hard to leave empty-handed.",
-    source: "JRW working principle",
-  },
-  {
-    quote:
-      "Bring the messy setup, the half-working console, the room that never sounds right, or the idea you cannot quite explain yet.",
-    source: "Workshop invitation",
-  },
-];
-
-const hospitalityDetails = [
-  "Clear quotes before work starts",
-  "Gear guidance without the upsell haze",
-  "ND-friendly pacing at workshops",
-  "Local pickup and event-first community",
-];
-
-const searchAnswers = [
-  {
-    question: "Where does JRW Creative Group work?",
-    answer:
-      "JRW is based around Fieldsboro and Bordentown, New Jersey, and focuses on Burlington County, Mercer County, Philadelphia, Princeton, and the Philadelphia-to-Princeton corridor.",
-  },
-  {
-    question: "What can I ask JRW to design or install?",
-    answer:
-      "Home theaters, studios, A/V routing, local LLM systems, NAS and media servers, backup plans, ZFS arrays, and bespoke retro setups all start with a free one-hour consultation.",
-  },
-  {
-    question: "Does The Swap offer 3D printing?",
-    answer:
-      "Yes. The Swap offers quote-based print-for-hire 3D printing. Pricing depends on the actual model, size, material needs, and production complexity.",
-  },
-  {
-    question: "What makes The Swap different?",
-    answer:
-      "The Swap combines monthly maker pop-ups, practical workshops, the How To Life series, upgraded retro hardware, and ND-friendly community learning.",
-  },
-];
-
-export default function Home() {
   return (
     <main id="content" className="min-h-screen bg-[#f7f2ea] text-neutral-950">
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: stringifyJsonLd(homePageJsonLd) }}
+        dangerouslySetInnerHTML={{ __html: stringifyJsonLd(buildHomePageJsonLd(content)) }}
       />
       <a
         href="#content"
@@ -143,9 +68,9 @@ export default function Home() {
               JRW
             </span>
             <span className="hidden text-sm leading-tight sm:block">
-              Creative Group
+              Tech
               <br />
-              <span className="text-teal-700">The Swap</span>
+              <span className="text-teal-700">Works</span>
             </span>
           </a>
           <nav aria-label="Main navigation" className="hidden items-center gap-5 lg:flex">
@@ -200,38 +125,36 @@ export default function Home() {
               data-physics-collider
               className="mb-5 inline-flex rounded-md border border-neutral-950/20 bg-white px-3 py-2 text-xs font-black uppercase tracking-wide text-neutral-700 shadow-[4px_4px_0_#f59e0b]"
             >
-              Fieldsboro / Bordentown / Philadelphia / Princeton
+              {hero.badge}
             </p>
             <h1
               id="hero-title"
               data-physics-collider
               className="max-w-4xl text-4xl font-black leading-[0.94] tracking-normal text-neutral-950 min-[380px]:text-5xl sm:text-7xl lg:text-8xl"
             >
-              Work with the gear. Leave with the confidence.
+              {hero.headline}
             </h1>
             <p className="mt-7 max-w-2xl text-lg leading-8 text-neutral-700 sm:text-xl">
-              JRW Creative Group LLC and The Swap help people build better rooms,
-              smarter local systems, useful prints, upgraded retro setups, and
-              approachable places to learn how things work without the gatekeeping.
+              {hero.subhead}
             </p>
             <div className="mt-8 flex flex-col gap-3 sm:flex-row">
               <a
-                href="#contact"
+                href={hero.primaryCta.href}
                 data-button
                 className="inline-flex h-12 items-center justify-center gap-2 rounded-md bg-neutral-950 px-5 text-sm font-black uppercase tracking-wide text-white transition hover:bg-neutral-800"
               >
-                Request a free consultation
+                {hero.primaryCta.label}
                 <ArrowRight aria-hidden="true" size={18} />
               </a>
               <a
-                href="#swap"
+                href={hero.secondaryCta.href}
                 data-button
                 className="inline-flex h-12 items-center justify-center rounded-md border border-neutral-950 px-5 text-sm font-black uppercase tracking-wide transition hover:bg-white"
               >
-                Explore The Swap
+                {hero.secondaryCta.label}
               </a>
             </div>
-            <div className="mt-8 flex flex-wrap gap-2" aria-label="JRW Creative Group quality signals">
+            <div className="mt-8 flex flex-wrap gap-2" aria-label="JRW TechWorks quality signals">
               {proofSignals.slice(0, 3).map((signal) => (
                 <span
                   key={signal}
@@ -245,7 +168,7 @@ export default function Home() {
 
           <div className="relative grid gap-4 sm:min-h-[620px] sm:grid-cols-[0.82fr_1.18fr] lg:translate-y-8" data-hero-visual>
             <p className="absolute -right-4 top-4 z-20 hidden max-w-32 rotate-3 rounded-md bg-rose-600 px-3 py-2 text-center font-mono text-xs font-black uppercase text-white shadow-[6px_6px_0_#111] lg:block">
-              come as you are
+              {hero.cornerNote}
             </p>
             <div data-hero-card className="relative min-h-64 self-end sm:aspect-[4/5] sm:min-h-0">
               <div
@@ -253,9 +176,9 @@ export default function Home() {
                 className="absolute inset-0 overflow-hidden rounded-md border-4 border-neutral-950 bg-neutral-200 shadow-[10px_10px_0_#111]"
               >
                 <PictureImage
-                  src="/assets/jrw-maker-pop-up-photo.webp"
-                  fallbackSrc="/assets/jrw-maker-pop-up-photo.jpg"
-                  alt="Original JRW maker pop-up scene with people collaborating around tools and creative hardware"
+                  src="/assets/jrw-tech-workbench-photo.webp"
+                  fallbackSrc="/assets/jrw-tech-workbench-photo.jpg"
+                  alt="JRW TechWorks home tech workbench with servers, speakers, cabling, and calibration tools"
                   priority
                   className="object-cover"
                 />
@@ -265,19 +188,10 @@ export default function Home() {
               <div data-hero-card className="relative min-h-56 sm:min-h-60">
                 <div
                   data-float
-                  className="absolute inset-0 overflow-hidden rounded-md border-4 border-neutral-950 bg-white shadow-[10px_10px_0_#0f766e]"
+                  className="absolute inset-0 flex flex-col justify-end overflow-hidden rounded-md border-4 border-neutral-950 bg-neutral-950 p-5 text-white shadow-[10px_10px_0_#0f766e]"
                 >
-                  <PictureImage
-                    src="/assets/jrw-tech-workbench-photo.webp"
-                    fallbackSrc="/assets/jrw-tech-workbench-photo.jpg"
-                    alt="Original JRW home tech workbench with servers, speakers, cabling, and calibration tools"
-                    priority
-                    className="object-cover"
-                  />
-                  <div className="absolute inset-x-0 bottom-0 bg-neutral-950/90 p-4 text-white">
-                    <p className="font-mono text-xs uppercase text-amber-300">The Swap makes room for</p>
-                    <p className="mt-1 text-xl font-black leading-tight sm:text-2xl">prints, repairs, local AI, and the people figuring it out.</p>
-                  </div>
+                  <p className="font-mono text-xs uppercase text-amber-300">{hero.captions[0].kicker}</p>
+                  <p className="mt-1 text-xl font-black leading-tight sm:text-2xl">{hero.captions[0].text}</p>
                 </div>
               </div>
               <div
@@ -286,18 +200,14 @@ export default function Home() {
               >
                 <div
                   data-float
-                  className="absolute inset-0 overflow-hidden rounded-md border-4 border-neutral-950 bg-amber-300 shadow-[10px_10px_0_#e11d48]"
+                  className="absolute inset-0 flex flex-col justify-between overflow-hidden rounded-md border-4 border-neutral-950 bg-amber-300 p-5 text-neutral-950 shadow-[10px_10px_0_#e11d48]"
                 >
-                  <PictureImage
-                    src="/assets/jrw-makerspace-interior-photo.webp"
-                    fallbackSrc="/assets/jrw-makerspace-interior-photo.jpg"
-                    alt="Original JRW future makerspace interior with workshop tables, tools, and community seating"
-                    priority
-                    className="object-cover"
-                  />
-                  <div className="absolute left-4 top-4 max-w-[calc(100%-2rem)] rounded-md bg-amber-300 p-4 text-neutral-950 shadow-[6px_6px_0_#111] sm:max-w-56">
-                    <p className="font-mono text-xs uppercase">Work + culture + useful gear</p>
-                    <p className="mt-2 text-xl font-black leading-tight sm:text-2xl">Empowerment is the brand spine.</p>
+                  <span className="grid size-12 place-items-center rounded-md bg-neutral-950 text-white">
+                    <Cpu aria-hidden="true" size={24} />
+                  </span>
+                  <div className="rounded-md bg-amber-300 p-1 sm:max-w-64">
+                    <p className="font-mono text-xs uppercase">{hero.captions[1].kicker}</p>
+                    <p className="mt-2 text-xl font-black leading-tight sm:text-2xl">{hero.captions[1].text}</p>
                   </div>
                 </div>
               </div>
@@ -306,7 +216,11 @@ export default function Home() {
         </div>
       </section>
 
-      <section data-physics-section="1" className="overflow-hidden border-b border-neutral-950/10 bg-neutral-950 text-white">
+      <section
+        id="approach"
+        data-physics-section="1"
+        className="overflow-hidden border-b border-neutral-950/10 bg-neutral-950 text-white"
+      >
         <div className="border-b border-white/15 py-4">
           <div className="marquee-track flex w-max gap-3 whitespace-nowrap px-5">
             {[...proofSignals, ...proofSignals].map((signal, index) => (
@@ -325,13 +239,13 @@ export default function Home() {
           className="mx-auto grid max-w-7xl gap-10 px-5 py-16 sm:px-8 lg:grid-cols-[0.82fr_1.18fr] lg:items-center lg:py-24"
         >
           <div data-reveal-left>
-            <p className="eyebrow-dark">Borrowed signal, JRW voice</p>
+            <p className="eyebrow-dark">{approach.eyebrow}</p>
             <h2 className="max-w-3xl text-3xl font-black leading-tight sm:text-6xl">
-              The site should feel less like a brochure and more like walking into the right room.
+              {approach.title}
             </h2>
           </div>
           <div className="grid gap-4 sm:grid-cols-2" data-stagger>
-            {hospitalityDetails.map((detail) => (
+            {approach.details.map((detail) => (
               <div
                 key={detail}
                 data-card
@@ -354,18 +268,13 @@ export default function Home() {
           className="mx-auto grid w-full max-w-7xl gap-8 px-5 py-14 sm:px-8 lg:grid-cols-[0.8fr_1.2fr] lg:items-center lg:py-20"
         >
           <div>
-            <p className="eyebrow">One brand, two arms</p>
-            <h2 className="section-title">Designed to make capable feel contagious.</h2>
+            <p className="eyebrow">{intro.eyebrow}</p>
+            <h2 className="section-title">{intro.title}</h2>
           </div>
           <div className="grid gap-5 sm:grid-cols-2">
-            <IntroCard
-              title="JRW Tech Consulting"
-              text="Quote-based in-home design and installation for home theaters, studios, A/V routing, local servers, self-hosted AI, media systems, and bespoke retro setups."
-            />
-            <IntroCard
-              title="The Swap"
-              text="A community-first makerspace arm for monthly events, print-for-hire 3D work, workshops, and restored or customized retro hardware."
-            />
+            {intro.cards.map((card) => (
+              <IntroCard key={card.title} title={card.title} text={card.text} />
+            ))}
           </div>
         </div>
       </section>
@@ -378,21 +287,17 @@ export default function Home() {
         <div data-reveal className="mx-auto max-w-7xl px-5 py-16 sm:px-8 lg:py-24">
           <div className="grid gap-8 lg:grid-cols-[0.9fr_1.1fr] lg:items-end">
             <div>
-              <p className="eyebrow">Consulting</p>
-              <h2 className="section-title">Start with a free one-hour consult.</h2>
+              <p className="eyebrow">{consulting.eyebrow}</p>
+              <h2 className="section-title">{consulting.title}</h2>
             </div>
-            <p className="text-lg leading-8 text-neutral-700">
-              Every consulting project begins with a no-cost, no-obligation conversation.
-              From there, choose a fixed-scope remote design package or local in-home
-              installation with labor quoted after the consult and equipment billed at cost.
-            </p>
+            <p className="text-lg leading-8 text-neutral-700">{consulting.intro}</p>
           </div>
 
           <div className="mt-10 grid gap-4 md:grid-cols-2 lg:grid-cols-5" data-stagger>
-            {consultingServices.map((service) => {
-              const Icon = service.icon;
+            {consulting.services.map((service) => {
+              const Icon = serviceIcons[service.key] ?? Cpu;
               return (
-                <article key={service.title} className="service-card">
+                <article key={service.key} className="service-card">
                   <Icon aria-hidden="true" className="text-teal-700" size={28} />
                   <h3 className="mt-5 text-xl font-black">{service.title}</h3>
                   <p className="mt-3 text-sm leading-6 text-neutral-700">{service.text}</p>
@@ -404,208 +309,85 @@ export default function Home() {
       </section>
 
       <section
-        id="swap"
+        id="why"
         data-physics-section="4"
-        className="overflow-hidden border-b border-neutral-950/10 bg-neutral-950 text-white"
+        className="border-b border-neutral-950/10 bg-[#f7f2ea]"
       >
-        <div
-          data-reveal
-          className="mx-auto grid max-w-7xl gap-10 px-5 py-16 sm:px-8 lg:grid-cols-[0.95fr_1.05fr] lg:py-24"
-        >
-          <div>
-            <p className="eyebrow-dark">The Swap</p>
-            <h2 className="text-3xl font-black leading-tight sm:text-6xl">A pop-up home for making, fixing, printing, and finding your people.</h2>
-            <p className="mt-6 text-lg leading-8 text-neutral-300">
-              The Swap is the community side of JRW: monthly events, donation-based
-              entry while the model grows, print-for-hire work, workshops, and a
-              future brick-and-mortar makerspace when the timing is right.
-            </p>
-          </div>
-          <div className="relative min-h-64 overflow-hidden rounded-md border-4 border-white bg-neutral-800 shadow-[8px_8px_0_#f59e0b] sm:min-h-80 sm:shadow-[12px_12px_0_#f59e0b]">
-            <PictureImage
-              src="/assets/jrw-storefront-photo.webp"
-              fallbackSrc="/assets/jrw-storefront-photo.jpg"
-              alt="Original JRW storefront concept showing a welcoming maker shop interior through the front windows"
-              className="object-cover opacity-90"
-            />
-          </div>
-        </div>
-      </section>
-
-      <section data-physics-section="5" className="border-b border-neutral-950/10 bg-[#f7f2ea]">
         <div
           data-reveal
           className="mx-auto grid max-w-7xl gap-10 px-5 py-16 sm:px-8 lg:grid-cols-[0.9fr_1.1fr] lg:items-center lg:py-24"
         >
-          <div className="relative min-h-[390px] sm:min-h-[520px]" data-reveal-left>
-            <div className="absolute left-0 top-0 h-56 w-[72%] overflow-hidden rounded-md border-4 border-neutral-950 bg-white shadow-[8px_8px_0_#111] sm:h-72 sm:shadow-[10px_10px_0_#111]">
+          <div className="relative min-h-[360px] sm:min-h-[480px]" data-reveal-left>
+            <div className="absolute left-0 top-0 h-64 w-[82%] overflow-hidden rounded-md border-4 border-neutral-950 bg-white shadow-[8px_8px_0_#111] sm:h-80 sm:shadow-[10px_10px_0_#111]">
               <PictureImage
-                src="/assets/jrw-maker-pop-up-photo.webp"
-                fallbackSrc="/assets/jrw-maker-pop-up-photo.jpg"
-                alt="Original JRW community pop-up scene for welcoming local events"
+                src="/assets/jrw-tech-workbench-photo.webp"
+                fallbackSrc="/assets/jrw-tech-workbench-photo.jpg"
+                alt="JRW TechWorks workbench with home theater and server gear laid out for a build"
                 className="object-cover"
               />
             </div>
-            <div className="absolute bottom-4 right-0 h-56 w-[70%] overflow-hidden rounded-md border-4 border-neutral-950 bg-white shadow-[8px_8px_0_#0f766e] sm:h-72 sm:shadow-[10px_10px_0_#0f766e]">
-              <PictureImage
-                src="/assets/jrw-makerspace-interior-photo.webp"
-                fallbackSrc="/assets/jrw-makerspace-interior-photo.jpg"
-                alt="Original JRW makerspace interior concept with tools, seating, and workshop tables"
-                className="object-cover"
-              />
-            </div>
-            <div className="absolute left-4 top-48 max-w-56 rotate-[-2deg] rounded-md border-2 border-neutral-950 bg-amber-300 p-4 shadow-[6px_6px_0_#e11d48] sm:left-6 sm:top-60 sm:max-w-64 sm:p-5 sm:shadow-[7px_7px_0_#e11d48]">
+            <div className="absolute bottom-4 right-0 max-w-56 rotate-[-2deg] rounded-md border-2 border-neutral-950 bg-amber-300 p-4 shadow-[6px_6px_0_#e11d48] sm:max-w-64 sm:p-5 sm:shadow-[7px_7px_0_#e11d48]">
               <Coffee aria-hidden="true" size={24} />
-              <p className="mt-3 text-xl font-black leading-tight sm:text-2xl">Pretty helps. Productive matters more.</p>
+              <p className="mt-3 text-xl font-black leading-tight sm:text-2xl">{proof.note}</p>
             </div>
           </div>
           <div data-reveal-right>
-            <p className="eyebrow">Community proof</p>
-            <h2 className="section-title">Make the useful stuff feel social.</h2>
-            <p className="mt-5 text-lg leading-8 text-neutral-700">
-              Strong community brands sell more than services: they make the culture
-              visible. For JRW, that means proof that the work is practical, local,
-              generous with knowledge, and comfortable enough for beginners to step in.
-            </p>
-            <div className="mt-8 grid gap-4" data-stagger>
-              {memberQuotes.map((item) => (
-                <figure
-                  key={item.source}
+            <p className="eyebrow">{proof.eyebrow}</p>
+            <h2 className="section-title">{proof.title}</h2>
+            <p className="mt-5 text-lg leading-8 text-neutral-700">{proof.intro}</p>
+            <div className="mt-8 grid gap-4 sm:grid-cols-2" data-stagger>
+              {proof.points.map((point) => (
+                <div
+                  key={point}
                   data-card
                   className="rounded-md border-2 border-neutral-950 bg-white p-5 shadow-[7px_7px_0_#f59e0b]"
                 >
-                  <Quote aria-hidden="true" className="text-rose-600" size={24} />
-                  <blockquote className="mt-3 text-xl font-black leading-snug">
-                    {item.quote}
-                  </blockquote>
-                  <figcaption className="mt-4 font-mono text-xs font-black uppercase text-teal-700">
-                    {item.source}
-                  </figcaption>
-                </figure>
+                  <BadgeCheck aria-hidden="true" className="text-teal-700" size={24} />
+                  <p className="mt-3 text-lg font-black leading-snug">{point}</p>
+                </div>
               ))}
             </div>
           </div>
         </div>
       </section>
 
-      <section
-        id="events"
-        data-physics-section="6"
-        className="border-b border-neutral-950/10 bg-white"
-      >
-        <div
-          data-reveal
-          data-late-section
-          className="mx-auto max-w-7xl px-5 py-16 sm:px-8 lg:py-24"
-        >
-          <SectionHeader
-            eyebrow="Upcoming / Find us"
-            title="Dates, venues, and booths stay easy to update."
-            text="Year one is built around monthly pop-ups and convention appearances when possible. Locations are announced per event."
-          />
-          <div className="mt-10 grid gap-5 md:grid-cols-2" data-pop-grid>
-            {events.map((event) => (
-              <EditableCard key={event.title} item={event} icon="calendar" />
-            ))}
-          </div>
-        </div>
-      </section>
-
-      <section data-physics-section="7" className="border-b border-neutral-950/10 bg-[#f7f2ea]">
+      <section data-physics-section="5" className="border-b border-neutral-950/10 bg-white">
         <div
           data-reveal
           data-late-section
           className="mx-auto grid max-w-7xl gap-8 px-5 py-16 sm:px-8 lg:grid-cols-2 lg:py-24"
         >
-          <FeaturePanel
-            icon={<Printer aria-hidden="true" size={30} />}
-            eyebrow="3D printing"
-            title="Print-for-hire, quoted by the actual job."
-            body={printing.guidance}
-            foot={printing.equipment}
-          />
-          <FeaturePanel
-            icon={<Box aria-hidden="true" size={30} />}
-            eyebrow="Upgraded retro hardware"
-            title={retroOfferings.prompt}
-            body={retroOfferings.guidance}
-            foot={retroOfferings.ctaLabel}
-          />
+          {spotlights.items.map((item) => {
+            const Icon = serviceIcons[item.key] ?? Cpu;
+            return (
+              <FeaturePanel
+                key={item.key}
+                icon={<Icon aria-hidden="true" size={30} />}
+                eyebrow={item.eyebrow}
+                title={item.title}
+                body={item.body}
+                foot={item.foot}
+              />
+            );
+          })}
         </div>
       </section>
 
-      <section
-        id="workshops"
-        data-physics-section="8"
-        className="border-b border-neutral-950/10 bg-white"
-      >
-        <div
-          data-reveal
-          data-late-section
-          className="mx-auto max-w-7xl px-5 py-16 sm:px-8 lg:py-24"
-        >
-          <SectionHeader
-            eyebrow="Workshops"
-            title="The point is empowerment, not gatekeeping."
-            text="Workshops run through events, partner venues, and pop-ups. The lineup can change as instructors, spaces, and community needs come together."
-          />
-          <div className="mt-10 grid gap-5 md:grid-cols-2" data-pop-grid>
-            {workshops.map((workshop) => (
-              <EditableCard key={workshop.title} item={workshop} icon="hammer" />
-            ))}
-          </div>
-        </div>
-      </section>
-
-      <section
-        data-physics-section="9"
-        className="border-b border-neutral-950/10 bg-teal-700 text-white"
-      >
-        <div
-          data-reveal
-          data-late-section
-          className="mx-auto grid max-w-7xl gap-8 px-5 py-16 sm:px-8 lg:grid-cols-[0.85fr_1.15fr] lg:py-24"
-        >
-          <div data-reveal-left>
-            <p className="eyebrow-dark">Future makerspace</p>
-            <h2 className="text-3xl font-black leading-tight sm:text-6xl">A permanent home is the long game.</h2>
-          </div>
-          <div data-reveal-right data-detail-list>
-            <p className="text-xl leading-9 text-teal-50">
-              The goal is a local makerspace home for practical classes, creative
-              hardware, 3D printing, repair culture, and community events across
-              Burlington County, Mercer County, and the Philadelphia to Princeton corridor.
-            </p>
-            <a
-              href="#contact"
-              data-button
-              className="mt-8 inline-flex h-12 items-center justify-center gap-2 rounded-md bg-white px-5 text-sm font-black uppercase tracking-wide text-teal-900 transition hover:bg-amber-200"
-            >
-              Join the list
-              <ArrowRight aria-hidden="true" size={18} />
-            </a>
-          </div>
-        </div>
-      </section>
-
-      <section className="border-b border-neutral-950/10 bg-white" aria-labelledby="search-answers-title">
+      <section id="faq" className="border-b border-neutral-950/10 bg-white" aria-labelledby="search-answers-title">
         <div
           data-reveal
           data-late-section
           className="mx-auto grid max-w-7xl gap-8 px-5 py-16 sm:px-8 lg:grid-cols-[0.8fr_1.2fr] lg:py-24"
         >
           <div>
-            <p className="eyebrow">Quick answers</p>
+            <p className="eyebrow">{faq.eyebrow}</p>
             <h2 id="search-answers-title" className="section-title">
-              Practical facts for local search.
+              {faq.title}
             </h2>
-            <p className="mt-5 text-lg leading-8 text-neutral-700">
-              A concise summary of what JRW Creative Group and The Swap do,
-              where they work, and how to start.
-            </p>
+            <p className="mt-5 text-lg leading-8 text-neutral-700">{faq.intro}</p>
           </div>
           <div className="grid gap-4" data-stagger>
-            {searchAnswers.map((item) => (
+            {faq.items.map((item) => (
               <article
                 key={item.question}
                 data-card
@@ -619,9 +401,33 @@ export default function Home() {
         </div>
       </section>
 
+      <section data-physics-section="6" className="border-b border-neutral-950/10 bg-teal-700 text-white">
+        <div
+          data-reveal
+          data-late-section
+          className="mx-auto grid max-w-7xl gap-8 px-5 py-16 sm:px-8 lg:grid-cols-[0.85fr_1.15fr] lg:py-24"
+        >
+          <div data-reveal-left>
+            <p className="eyebrow-dark">{cta.eyebrow}</p>
+            <h2 className="text-3xl font-black leading-tight sm:text-6xl">{cta.title}</h2>
+          </div>
+          <div data-reveal-right data-detail-list>
+            <p className="text-xl leading-9 text-teal-50">{cta.body}</p>
+            <a
+              href={cta.button.href}
+              data-button
+              className="mt-8 inline-flex h-12 items-center justify-center gap-2 rounded-md bg-white px-5 text-sm font-black uppercase tracking-wide text-teal-900 transition hover:bg-amber-200"
+            >
+              {cta.button.label}
+              <ArrowRight aria-hidden="true" size={18} />
+            </a>
+          </div>
+        </div>
+      </section>
+
       <section
         id="contact"
-        data-physics-section="10"
+        data-physics-section="7"
         data-free-scroll
         className="flex min-h-[calc(100svh-88px)] flex-col bg-[#f7f2ea]"
       >
@@ -631,22 +437,17 @@ export default function Home() {
           className="mx-auto grid w-full max-w-7xl flex-1 gap-10 px-5 py-10 sm:px-8 lg:grid-cols-[0.85fr_1.15fr] lg:items-center lg:py-14"
         >
           <div data-reveal-left>
-            <p className="eyebrow">Contact</p>
-            <h2 className="section-title">Tell us what you want to build next.</h2>
-            <p className="mt-5 text-lg leading-8 text-neutral-700">
-              Use this for a free in-home tech consultation, a 3D print quote,
-              workshop interest, event questions, or current upgraded retro hardware
-              inquiries.
-            </p>
+            <p className="eyebrow">{contact.eyebrow}</p>
+            <h2 className="section-title">{contact.title}</h2>
+            <p className="mt-5 text-lg leading-8 text-neutral-700">{contact.intro}</p>
             <div className="mt-8 grid gap-4 text-sm font-semibold text-neutral-800" data-detail-list>
               <p className="flex items-start gap-3">
                 <MapPin aria-hidden="true" className="mt-0.5 text-rose-600" size={20} />
-                Local focus: Fieldsboro, Bordentown, Burlington County, Mercer County,
-                Philadelphia, and Princeton.
+                {contact.localFocus}
               </p>
               <p className="flex items-start gap-3">
                 <CalendarDays aria-hidden="true" className="mt-0.5 text-rose-600" size={20} />
-                Events and workshops are announced as venues and dates are confirmed.
+                {contact.availabilityNote}
               </p>
             </div>
           </div>
@@ -666,30 +467,28 @@ export default function Home() {
                 JRW
               </span>
               <span className="text-sm leading-tight">
-                Creative Group
+                Tech
                 <br />
-                <span className="text-teal-300">The Swap</span>
+                <span className="text-teal-300">Works</span>
               </span>
             </a>
             <div className="flex flex-col gap-3 text-sm font-bold text-neutral-200 sm:flex-row sm:items-center sm:gap-6">
               <a
-                href="mailto:jaime@jrwcreative.group"
+                href={`mailto:${contact.email}`}
                 className="inline-flex items-center gap-2 transition hover:text-amber-300"
               >
                 <Mail aria-hidden="true" size={18} />
-                jaime@jrwcreative.group
+                {contact.email}
               </a>
               <a
-                href="tel:+16402487074"
+                href={`tel:${contact.phoneHref}`}
                 className="inline-flex items-center gap-2 transition hover:text-amber-300"
               >
                 <Phone aria-hidden="true" size={18} />
-                640-248-7074
+                {contact.phone}
               </a>
             </div>
-            <p className="text-sm font-semibold text-neutral-400">
-              © 2026 JRW Creative Group LLC. All rights reserved.
-            </p>
+            <p className="text-sm font-semibold text-neutral-400">{footer.legalLine}</p>
           </div>
         </footer>
       </section>
@@ -702,63 +501,6 @@ function IntroCard({ title, text }: { title: string; text: string }) {
     <article data-card className="rounded-md border-2 border-neutral-950 bg-[#f7f2ea] p-6">
       <h3 className="text-2xl font-black">{title}</h3>
       <p className="mt-3 leading-7 text-neutral-700">{text}</p>
-    </article>
-  );
-}
-
-function SectionHeader({
-  eyebrow,
-  title,
-  text,
-}: {
-  eyebrow: string;
-  title: string;
-  text: string;
-}) {
-  return (
-    <div className="max-w-3xl" data-section-head>
-      <p className="eyebrow" data-load-kicker>{eyebrow}</p>
-      <h2 className="section-title" data-load-title>{title}</h2>
-      <p className="mt-5 text-lg leading-8 text-neutral-700" data-load-copy>{text}</p>
-    </div>
-  );
-}
-
-function EditableCard({
-  item,
-  icon,
-}: {
-  item: {
-    title: string;
-    meta: string;
-    location: string;
-    description: string;
-    ctaLabel: string;
-    ctaHref: string;
-  };
-  icon: "calendar" | "hammer";
-}) {
-  const Icon = icon === "calendar" ? CalendarDays : Hammer;
-
-  return (
-    <article
-      data-card
-      data-pop-card
-      className="rounded-md border-2 border-neutral-950 bg-white p-6 shadow-[8px_8px_0_#f59e0b]"
-    >
-      <Icon aria-hidden="true" className="text-rose-600" size={28} />
-      <h3 className="mt-5 text-2xl font-black">{item.title}</h3>
-      <p className="mt-2 font-mono text-sm uppercase text-teal-700">{item.meta}</p>
-      <p className="mt-1 text-sm font-bold text-neutral-600">{item.location}</p>
-      <p className="mt-4 leading-7 text-neutral-700">{item.description}</p>
-      <a
-        href={item.ctaHref}
-        data-button
-        className="mt-5 inline-flex items-center gap-2 text-sm font-black uppercase tracking-wide text-neutral-950"
-      >
-        {item.ctaLabel}
-        <ArrowRight aria-hidden="true" size={16} />
-      </a>
     </article>
   );
 }

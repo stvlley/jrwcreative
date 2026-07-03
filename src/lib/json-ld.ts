@@ -1,13 +1,5 @@
-import { primaryImage, serviceArea, siteDescription, siteName, siteUrl } from "@/lib/seo";
-
-const contactPoint = {
-  "@type": "ContactPoint",
-  email: "jaime@jrwcreative.group",
-  telephone: "+1-640-248-7074",
-  contactType: "customer service",
-  areaServed: ["US-NJ", "US-PA"],
-  availableLanguage: "en",
-};
+import type { SiteContent } from "@/content/site";
+import { legalName, primaryImage, serviceArea, siteDescription, siteName, siteUrl } from "@/lib/seo";
 
 const services = [
   {
@@ -30,46 +22,49 @@ const services = [
   },
   {
     "@type": "Service",
-    "@id": `${siteUrl}/#3d-printing-service`,
-    name: "3D print-for-hire service",
+    "@id": `${siteUrl}/#studio-build`,
+    name: "Studio and creative workspace builds",
     description:
-      "Quote-based 3D printing using the actual model, size, material needs, and production complexity.",
+      "Audio and creative workspace design and installation for recording, editing, streaming, and making.",
     areaServed: serviceArea,
     provider: { "@id": `${siteUrl}/#organization` },
   },
   {
     "@type": "Service",
-    "@id": `${siteUrl}/#workshops-events`,
-    name: "The Swap workshops and maker events",
+    "@id": `${siteUrl}/#retro-setups`,
+    name: "Retro console setups and restoration",
     description:
-      "Monthly pop-ups, practical workshops, How To Life sessions, maker events, and community-first learning opportunities.",
-    areaServed: serviceArea,
-    provider: { "@id": `${siteUrl}/#organization` },
-  },
-  {
-    "@type": "Service",
-    "@id": `${siteUrl}/#retro-hardware`,
-    name: "Upgraded retro hardware and console restoration",
-    description:
-      "Piracy-free restoration, customization, signal quality work, and bespoke retro hardware setup guidance.",
+      "Piracy-free aesthetic design, rare hardware sourcing, restoration, customization, and quality-focused console builds.",
     areaServed: serviceArea,
     provider: { "@id": `${siteUrl}/#organization` },
   },
 ];
 
-export const homePageJsonLd = {
+export function buildHomePageJsonLd(content: SiteContent) {
+  const { contact, faq } = content;
+  const telephone = `+1-${contact.phone}`;
+  const contactPoint = {
+    "@type": "ContactPoint",
+    email: contact.email,
+    telephone,
+    contactType: "customer service",
+    areaServed: ["US-NJ", "US-PA"],
+    availableLanguage: "en",
+  };
+
+  return {
   "@context": "https://schema.org",
   "@graph": [
     {
       "@type": ["Organization", "LocalBusiness", "ProfessionalService"],
       "@id": `${siteUrl}/#organization`,
       name: siteName,
-      alternateName: "The Swap",
+      legalName,
       url: siteUrl,
       image: primaryImage,
       description: siteDescription,
-      email: "jaime@jrwcreative.group",
-      telephone: "+1-640-248-7074",
+      email: contact.email,
+      telephone,
       areaServed: serviceArea,
       contactPoint,
       makesOffer: services.map((service) => ({ "@id": service["@id"] })),
@@ -77,19 +72,18 @@ export const homePageJsonLd = {
         "home theater design",
         "A/V routing",
         "local LLM installation",
+        "self-hosted AI",
         "NAS servers",
         "media servers",
-        "3D printing",
+        "ZFS storage",
         "retro hardware restoration",
-        "maker workshops",
-        "neurodivergent-friendly learning",
       ],
     },
     {
       "@type": "WebSite",
       "@id": `${siteUrl}/#website`,
       url: siteUrl,
-      name: `${siteName} | The Swap`,
+      name: siteName,
       description: siteDescription,
       publisher: { "@id": `${siteUrl}/#organization` },
       inLanguage: "en-US",
@@ -98,7 +92,7 @@ export const homePageJsonLd = {
       "@type": "WebPage",
       "@id": `${siteUrl}/#webpage`,
       url: siteUrl,
-      name: "JRW Creative Group LLC and The Swap",
+      name: `${siteName} | In-Home Tech Consulting`,
       description: siteDescription,
       isPartOf: { "@id": `${siteUrl}/#website` },
       about: { "@id": `${siteUrl}/#organization` },
@@ -109,43 +103,18 @@ export const homePageJsonLd = {
     {
       "@type": "FAQPage",
       "@id": `${siteUrl}/#faq`,
-      mainEntity: [
-        {
-          "@type": "Question",
-          name: "Where does JRW Creative Group work?",
-          acceptedAnswer: {
-            "@type": "Answer",
-            text: "JRW Creative Group is based around Fieldsboro and Bordentown, New Jersey, and focuses on Burlington County, Mercer County, Philadelphia, Princeton, and the Philadelphia-to-Princeton corridor.",
-          },
+      mainEntity: faq.items.map((item) => ({
+        "@type": "Question",
+        name: item.question,
+        acceptedAnswer: {
+          "@type": "Answer",
+          text: item.answer,
         },
-        {
-          "@type": "Question",
-          name: "What does the free consultation cover?",
-          acceptedAnswer: {
-            "@type": "Answer",
-            text: "The free one-hour consultation is the first step for in-home tech consulting, home theater, A/V routing, server, local AI, media system, and retro setup projects.",
-          },
-        },
-        {
-          "@type": "Question",
-          name: "Does The Swap offer 3D printing?",
-          acceptedAnswer: {
-            "@type": "Answer",
-            text: "Yes. The Swap offers quote-based 3D print-for-hire service. Pricing depends on the model, size, material needs, and production complexity.",
-          },
-        },
-        {
-          "@type": "Question",
-          name: "What is The Swap?",
-          acceptedAnswer: {
-            "@type": "Answer",
-            text: "The Swap is the community side of JRW Creative Group, focused on maker pop-ups, workshops, print-for-hire 3D work, and upgraded retro hardware.",
-          },
-        },
-      ],
+      })),
     },
   ],
-};
+  };
+}
 
 export function stringifyJsonLd(data: unknown) {
   return JSON.stringify(data).replace(/</g, "\\u003c");

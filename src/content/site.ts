@@ -1,64 +1,246 @@
-export type EditableItem = {
+// Single source of truth for all editable site copy.
+// Phase 2 (CMS) stores this exact shape as a JSON document in Vercel Blob and
+// renders from it; these values are the type definition and the seed/fallback.
+
+export type CtaLink = { label: string; href: string };
+export type ServiceItem = { key: string; title: string; text: string };
+export type FaqItem = { question: string; answer: string };
+export type Caption = { kicker: string; text: string };
+export type SpotlightItem = {
+  key: string;
+  eyebrow: string;
   title: string;
-  meta: string;
-  location: string;
-  description: string;
-  ctaLabel: string;
-  ctaHref: string;
+  body: string;
+  foot: string;
 };
 
-export const events: EditableItem[] = [
-  {
-    title: "Monthly Swap Pop-Ups",
-    meta: "Year one cadence: monthly",
-    location: "Locations announced per event",
-    description:
-      "Donation-based community events for makers, players, tinkerers, artists, and people who want useful tech to feel less closed off.",
-    ctaLabel: "Ask about the next event",
-    ctaHref: "#contact",
-  },
-  {
-    title: "Convention Booths",
-    meta: "Confirmed dates added here",
-    location: "Philadelphia to Princeton corridor",
-    description:
-      "Find The Swap at conventions when booth dates are confirmed. This module is intentionally easy to edit as plans lock in.",
-    ctaLabel: "Find us",
-    ctaHref: "#contact",
-  },
-];
-
-export const workshops: EditableItem[] = [
-  {
-    title: "How To Life",
-    meta: "Flagship series",
-    location: "ND-friendly pop-up workshops",
-    description:
-      "Accessible, practical sessions for fixing, making, maintaining, and understanding everyday things with less gatekeeping.",
-    ctaLabel: "Join the interest list",
-    ctaHref: "#contact",
-  },
-  {
-    title: "Make + Mod Sessions",
-    meta: "3D printing, soldering, art, textile craft",
-    location: "Events and partner venues",
-    description:
-      "Hands-on sessions across creative hardware, software modding, makeup, crochet, knitting, repairs, and instructor-led skill swaps.",
-    ctaLabel: "Suggest a workshop",
-    ctaHref: "#contact",
-  },
-];
-
-export const printing = {
-  prompt: "Send a model, reference, or rough idea for a 3D print quote.",
-  guidance:
-    "Pricing is quote-based and depends on the actual model, size, material needs, and complexity. Two prints with the same volume can price differently when one is harder to produce cleanly.",
-  equipment: "Bambu Lab P1P active now. P1S + AMS 2 Pro incoming.",
+export type SiteContent = {
+  hero: {
+    badge: string;
+    headline: string;
+    subhead: string;
+    primaryCta: CtaLink;
+    secondaryCta: CtaLink;
+    cornerNote: string;
+    captions: Caption[];
+  };
+  proofSignals: string[];
+  intro: {
+    eyebrow: string;
+    title: string;
+    cards: { title: string; text: string }[];
+  };
+  approach: {
+    eyebrow: string;
+    title: string;
+    details: string[];
+  };
+  consulting: {
+    eyebrow: string;
+    title: string;
+    intro: string;
+    services: ServiceItem[];
+  };
+  proof: {
+    eyebrow: string;
+    title: string;
+    intro: string;
+    note: string;
+    points: string[];
+  };
+  spotlights: {
+    items: SpotlightItem[];
+  };
+  cta: {
+    eyebrow: string;
+    title: string;
+    body: string;
+    button: CtaLink;
+  };
+  faq: {
+    eyebrow: string;
+    title: string;
+    intro: string;
+    items: FaqItem[];
+  };
+  contact: {
+    eyebrow: string;
+    title: string;
+    intro: string;
+    email: string;
+    phone: string;
+    phoneHref: string;
+    localFocus: string;
+    availabilityNote: string;
+  };
+  footer: {
+    legalLine: string;
+  };
 };
 
-export const retroOfferings = {
-  prompt: "Contact for current upgraded retro hardware offerings.",
-  guidance:
-    "The Swap focuses on restoration, customization, signal quality, durable hardware work, and legitimate personal setups. No preloaded copyrighted libraries or piracy-forward builds.",
-  ctaLabel: "Ask what is available",
+export const siteContent: SiteContent = {
+  hero: {
+    badge: "Fieldsboro / Bordentown / Philadelphia / Princeton",
+    headline: "Work with the gear. Leave with the confidence.",
+    subhead:
+      "JRW TechWorks designs and installs better home theaters, smarter local systems, self-hosted AI, and bespoke retro setups — done right, quoted per project, without the gatekeeping.",
+    primaryCta: { label: "Request a free consultation", href: "#contact" },
+    secondaryCta: { label: "See what we build", href: "#consulting" },
+    cornerNote: "done right",
+    captions: [
+      {
+        kicker: "JRW TechWorks brings",
+        text: "home theaters, local AI, servers, and retro builds under one roof.",
+      },
+      {
+        kicker: "Design + install + support",
+        text: "One team, from first plan to final install.",
+      },
+    ],
+  },
+  proofSignals: [
+    "Free 1-hour consult",
+    "Quoted per project",
+    "Equipment billed at cost",
+    "Real rooms, real hardware",
+    "Local NJ + PA corridor",
+  ],
+  intro: {
+    eyebrow: "One focus, done right",
+    title: "Home tech, designed and installed right.",
+    cards: [
+      {
+        title: "In-home design & install",
+        text: "Quote-based in-home design and installation for home theaters, studios, A/V routing, local servers, self-hosted AI, media systems, and bespoke retro setups.",
+      },
+      {
+        title: "Premium, relationship-driven",
+        text: "Every project starts with a free one-hour consult, then a fixed-scope remote design package or local in-home install — labor quoted after the consult, equipment billed at cost.",
+      },
+    ],
+  },
+  approach: {
+    eyebrow: "How it feels to work with us",
+    title: "No jargon, no upsell, no surprises.",
+    details: [
+      "Clear quotes before work starts",
+      "Gear guidance without the upsell haze",
+      "Equipment billed at cost, labor quoted per project",
+      "In-home installs and remote design options",
+    ],
+  },
+  consulting: {
+    eyebrow: "Consulting",
+    title: "Start with a free one-hour consult.",
+    intro:
+      "Every project begins with a no-cost, no-obligation conversation. From there, choose a fixed-scope remote design package or local in-home installation — labor quoted after the consult and equipment billed at cost. No published prices, because every room and system is different.",
+    services: [
+      {
+        key: "home-theater",
+        title: "Home theaters",
+        text: "Projector and screen design, calibration, room layout, acoustics, and source planning.",
+      },
+      {
+        key: "studios",
+        title: "Studios",
+        text: "Audio and creative workspace builds that make recording, editing, streaming, and making easier to repeat.",
+      },
+      {
+        key: "av-routing",
+        title: "A/V routing",
+        text: "Whole-system signal routing, integration, source cleanup, and practical control paths.",
+      },
+      {
+        key: "servers",
+        title: "In-home servers",
+        text: "Local LLM setups, voice-ready AI options, NAS storage, backup plans, ZFS arrays, and media servers.",
+      },
+      {
+        key: "retro",
+        title: "Retro setups",
+        text: "Aesthetic design, rare hardware sourcing, restoration, customization, and quality-focused console builds.",
+      },
+    ],
+  },
+  proof: {
+    eyebrow: "Why JRW TechWorks",
+    title: "Capable, local, and done right.",
+    intro:
+      "The work is practical, local, and built to last — clear quotes, honest gear guidance, and setups tuned to how you actually live and work.",
+    note: "Built right the first time.",
+    points: [
+      "Clear quotes before any work starts",
+      "Honest gear guidance, no upsell",
+      "Local installs across the NJ + PA corridor",
+      "Every project starts with a free consult",
+    ],
+  },
+  spotlights: {
+    items: [
+      {
+        key: "servers",
+        eyebrow: "In-home servers & local AI",
+        title: "Self-hosted AI and storage, done properly.",
+        body: "Local LLM setups with optional voice, NAS storage, ZFS arrays, backup plans, and media servers — private, fast, and fully yours.",
+        foot: "Local LLM · NAS · ZFS · media servers",
+      },
+      {
+        key: "retro",
+        eyebrow: "Bespoke retro setups",
+        title: "The ultimate setup for any console.",
+        body: "Aesthetic design, rare hardware sourcing, restoration, and customization for quality-focused, piracy-free builds.",
+        foot: "Sourcing · restoration · customization",
+      },
+    ],
+  },
+  cta: {
+    eyebrow: "Ready when you are",
+    title: "Build it right the first time.",
+    body: "Every project starts with a free one-hour consult — no cost, no obligation. Tell us the room, the system, or the idea and we'll map the path.",
+    button: { label: "Book your free consult", href: "#contact" },
+  },
+  faq: {
+    eyebrow: "Quick answers",
+    title: "Practical facts for local search.",
+    intro:
+      "A concise summary of what JRW TechWorks does, where it works, and how to start.",
+    items: [
+      {
+        question: "Where does JRW TechWorks work?",
+        answer:
+          "JRW TechWorks is based around Fieldsboro and Bordentown, New Jersey, and serves Burlington County, Mercer County, Philadelphia, Princeton, and the Philadelphia-to-Princeton corridor.",
+      },
+      {
+        question: "What can I ask JRW TechWorks to design or install?",
+        answer:
+          "Home theaters, studios, A/V routing, local LLM systems, NAS and media servers, backup plans, ZFS arrays, and bespoke retro setups all start with a free one-hour consultation.",
+      },
+      {
+        question: "How does pricing work?",
+        answer:
+          "Every project is quoted individually after the free consult. You choose a fixed-scope remote design package or local in-home installation, with labor quoted and equipment billed at cost.",
+      },
+      {
+        question: "Do you work on retro consoles?",
+        answer:
+          "Yes. Retro setups cover aesthetic design, rare hardware sourcing, restoration, customization, and quality-focused console builds — all piracy-free.",
+      },
+    ],
+  },
+  contact: {
+    eyebrow: "Contact",
+    title: "Tell us what you want to build next.",
+    intro:
+      "Use this for a free in-home tech consultation, a retro setup, or questions about home theater, A/V, servers, or local AI.",
+    email: "jaime@jrwcreative.group",
+    phone: "640-248-7074",
+    phoneHref: "+16402487074",
+    localFocus:
+      "Local focus: Fieldsboro, Bordentown, Burlington County, Mercer County, Philadelphia, and Princeton.",
+    availabilityNote:
+      "Consultations are scheduled as availability allows — reach out and we'll find a time.",
+  },
+  footer: {
+    legalLine: "© 2026 JRW Creative Group LLC. All rights reserved.",
+  },
 };

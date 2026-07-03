@@ -81,10 +81,9 @@ export function ContactForm() {
               Choose one
             </option>
             <option>Free tech consultation</option>
-            <option>3D print quote</option>
-            <option>Event or workshop list</option>
-            <option>Upgraded retro hardware</option>
-            <option>Future makerspace</option>
+            <option>Home theater / A/V</option>
+            <option>Server / local AI / NAS</option>
+            <option>Retro setup</option>
             <option>Other</option>
           </select>
         </label>
@@ -107,7 +106,7 @@ export function ContactForm() {
           name="message"
           required
           rows={4}
-          placeholder="Tell us what you want to build, fix, host, print, or learn."
+          placeholder="Tell us what you want to build, fix, or host."
           className="min-h-28 rounded-md border border-neutral-300 bg-white px-3 py-2.5 text-base font-normal text-neutral-950 outline-none transition placeholder:text-neutral-500 focus:border-neutral-950 focus:ring-4 focus:ring-amber-200 sm:min-h-36 sm:py-3"
         />
       </label>

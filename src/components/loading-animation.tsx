@@ -70,7 +70,7 @@ export function LoadingAnimation() {
       data-loader
       className="fixed inset-0 z-[100] grid place-items-center overflow-hidden bg-neutral-950 text-white"
       role="status"
-      aria-label="Loading JRW Creative Group"
+      aria-label="Loading JRW TechWorks"
     >
       <div className="w-full max-w-sm px-8">
         <div className="flex items-center gap-4">
@@ -83,12 +83,12 @@ export function LoadingAnimation() {
           <div className="grid gap-1">
             <div>
               <p data-loader-text className="font-black uppercase leading-none tracking-wide">
-                Creative Group
+                TechWorks
               </p>
             </div>
             <div>
               <p data-loader-text className="font-mono text-sm uppercase leading-none text-teal-300">
-                The Swap
+                In-home tech
               </p>
             </div>
           </div>
