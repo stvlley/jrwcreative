@@ -6,6 +6,7 @@ import {
   type Caption,
   type CtaLink,
   type FaqItem,
+  type ImageRef,
   type ServiceItem,
   type SiteContent,
   type SpotlightItem,
@@ -60,6 +61,11 @@ function cta(v: unknown, fallback: CtaLink): CtaLink {
   return { label: str(o.label, fallback.label), href: str(o.href, fallback.href) };
 }
 
+function image(v: unknown, fallback: ImageRef): ImageRef {
+  const o = asObj(v);
+  return { src: str(o.src, fallback.src), alt: str(o.alt, fallback.alt) };
+}
+
 function strList(v: unknown, fallback: string[]): string[] {
   return Array.isArray(v) && v.length ? v.map((x, i) => str(x, fallback[i] ?? "")) : fallback;
 }
@@ -83,8 +89,12 @@ export function normalizeContent(input: unknown): SiteContent {
   const faq = asObj(o.faq);
   const contact = asObj(o.contact);
   const footer = asObj(o.footer);
+  const branding = asObj(o.branding);
 
   return {
+    branding: {
+      logo: str(branding.logo, d.branding.logo),
+    },
     hero: {
       badge: str(hero.badge, d.hero.badge),
       headline: str(hero.headline, d.hero.headline),
@@ -96,6 +106,7 @@ export function normalizeContent(input: unknown): SiteContent {
         kicker: str(c.kicker, fb.kicker),
         text: str(c.text, fb.text),
       })),
+      imageOverride: image(hero.imageOverride, d.hero.imageOverride),
     },
     proofSignals: strList(o.proofSignals, d.proofSignals),
     intro: {
@@ -127,6 +138,7 @@ export function normalizeContent(input: unknown): SiteContent {
       intro: str(proof.intro, d.proof.intro),
       note: str(proof.note, d.proof.note),
       points: strList(proof.points, d.proof.points),
+      imageOverride: image(proof.imageOverride, d.proof.imageOverride),
     },
     spotlights: {
       items: mapList<SpotlightItem>(spotlights.items, d.spotlights.items, (s, fb) => ({

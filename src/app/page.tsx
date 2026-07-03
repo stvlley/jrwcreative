@@ -40,7 +40,7 @@ const navItems: [string, string][] = [
 
 export default async function Home() {
   const content = await getContent();
-  const { hero, proofSignals, intro, approach, consulting, proof, spotlights, cta, faq, contact, footer } =
+  const { branding, hero, proofSignals, intro, approach, consulting, proof, spotlights, cta, faq, contact, footer } =
     content;
 
   return (
@@ -65,14 +65,21 @@ export default async function Home() {
         />
         <div className="mx-auto flex max-w-7xl items-center justify-between gap-3 px-4 py-3 sm:gap-6 sm:px-8 sm:py-4">
           <a href="#top" className="flex items-center gap-3 font-black uppercase tracking-wide">
-            <span className="grid size-10 shrink-0 place-items-center rounded-md bg-neutral-950 text-lg text-white">
-              JRW
-            </span>
-            <span className="hidden text-sm leading-tight sm:block">
-              Tech
-              <br />
-              <span className="text-teal-700">Works</span>
-            </span>
+            {branding.logo ? (
+              // eslint-disable-next-line @next/next/no-img-element
+              <img src={branding.logo} alt="JRW TechWorks" className="h-10 w-auto" />
+            ) : (
+              <>
+                <span className="grid size-10 shrink-0 place-items-center rounded-md bg-neutral-950 text-lg text-white">
+                  JRW
+                </span>
+                <span className="hidden text-sm leading-tight sm:block">
+                  Tech
+                  <br />
+                  <span className="text-teal-700">Works</span>
+                </span>
+              </>
+            )}
           </a>
           <nav aria-label="Main navigation" className="hidden items-center gap-5 lg:flex">
             {navItems.map(([label, href]) => (
@@ -176,13 +183,22 @@ export default async function Home() {
                 data-float
                 className="absolute inset-0 overflow-hidden rounded-md border-4 border-neutral-950 bg-neutral-200 shadow-[10px_10px_0_#111]"
               >
-                <PictureImage
-                  src="/assets/jrw-tech-workbench-photo.webp"
-                  fallbackSrc="/assets/jrw-tech-workbench-photo.jpg"
-                  alt="JRW TechWorks home tech workbench with servers, speakers, cabling, and calibration tools"
-                  priority
-                  className="object-cover"
-                />
+                {hero.imageOverride.src ? (
+                  <SiteImage
+                    src={hero.imageOverride.src}
+                    alt={hero.imageOverride.alt || "JRW TechWorks home tech setup"}
+                    priority
+                    className="object-cover"
+                  />
+                ) : (
+                  <PictureImage
+                    src="/assets/jrw-tech-workbench-photo.webp"
+                    fallbackSrc="/assets/jrw-tech-workbench-photo.jpg"
+                    alt="JRW TechWorks home tech workbench with servers, speakers, cabling, and calibration tools"
+                    priority
+                    className="object-cover"
+                  />
+                )}
               </div>
             </div>
             <div className="grid gap-4">
@@ -320,12 +336,20 @@ export default async function Home() {
         >
           <div className="relative min-h-[360px] sm:min-h-[480px]" data-reveal-left>
             <div className="absolute left-0 top-0 h-64 w-[82%] overflow-hidden rounded-md border-4 border-neutral-950 bg-white shadow-[8px_8px_0_#111] sm:h-80 sm:shadow-[10px_10px_0_#111]">
-              <PictureImage
-                src="/assets/jrw-tech-workbench-photo.webp"
-                fallbackSrc="/assets/jrw-tech-workbench-photo.jpg"
-                alt="JRW TechWorks workbench with home theater and server gear laid out for a build"
-                className="object-cover"
-              />
+              {proof.imageOverride.src ? (
+                <SiteImage
+                  src={proof.imageOverride.src}
+                  alt={proof.imageOverride.alt || "JRW TechWorks project photo"}
+                  className="object-cover"
+                />
+              ) : (
+                <PictureImage
+                  src="/assets/jrw-tech-workbench-photo.webp"
+                  fallbackSrc="/assets/jrw-tech-workbench-photo.jpg"
+                  alt="JRW TechWorks workbench with home theater and server gear laid out for a build"
+                  className="object-cover"
+                />
+              )}
             </div>
             <div className="absolute bottom-4 right-0 max-w-56 rotate-[-2deg] rounded-md border-2 border-neutral-950 bg-amber-300 p-4 shadow-[6px_6px_0_#e11d48] sm:max-w-64 sm:p-5 sm:shadow-[7px_7px_0_#e11d48]">
               <Coffee aria-hidden="true" size={24} />
@@ -464,14 +488,21 @@ export default async function Home() {
         <footer className="border-t border-neutral-950/10 bg-neutral-950 text-white">
           <div className="mx-auto flex max-w-7xl flex-col gap-5 px-5 py-6 sm:px-8 lg:flex-row lg:items-center lg:justify-between">
             <a href="#top" className="flex items-center gap-3 font-black uppercase tracking-wide">
-              <span className="grid size-10 place-items-center rounded-md bg-white text-lg text-neutral-950">
-                JRW
-              </span>
-              <span className="text-sm leading-tight">
-                Tech
-                <br />
-                <span className="text-teal-300">Works</span>
-              </span>
+              {branding.logo ? (
+                // eslint-disable-next-line @next/next/no-img-element
+              <img src={branding.logo} alt="JRW TechWorks" className="h-10 w-auto" />
+              ) : (
+                <>
+                  <span className="grid size-10 place-items-center rounded-md bg-white text-lg text-neutral-950">
+                    JRW
+                  </span>
+                  <span className="text-sm leading-tight">
+                    Tech
+                    <br />
+                    <span className="text-teal-300">Works</span>
+                  </span>
+                </>
+              )}
             </a>
             <div className="flex flex-col gap-3 text-sm font-bold text-neutral-200 sm:flex-row sm:items-center sm:gap-6">
               <a
@@ -576,5 +607,30 @@ function PictureImage({
         className={`absolute inset-0 h-full w-full ${className ?? ""}`}
       />
     </picture>
+  );
+}
+
+// Single-source image for owner-uploaded photos (no webp/jpg pair to fall back to).
+function SiteImage({
+  src,
+  alt,
+  className,
+  priority = false,
+}: {
+  src: string;
+  alt: string;
+  className?: string;
+  priority?: boolean;
+}) {
+  return (
+    // eslint-disable-next-line @next/next/no-img-element
+    <img
+      src={src}
+      alt={alt}
+      loading={priority ? "eager" : "lazy"}
+      decoding={priority ? "sync" : "async"}
+      fetchPriority={priority ? "high" : "auto"}
+      className={`absolute inset-0 h-full w-full ${className ?? ""}`}
+    />
   );
 }

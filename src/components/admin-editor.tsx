@@ -74,6 +74,15 @@ export function AdminEditor({
       </p>
 
       <div className="space-y-10">
+        <Section title="Branding">
+          <ImageField
+            label="Logo (replaces the JRW / TechWorks text mark; PNG or SVG recommended)"
+            src={content.branding.logo}
+            onSrc={(v) => update((d) => { d.branding.logo = v; })}
+            onClear={() => update((d) => { d.branding.logo = ""; })}
+          />
+        </Section>
+
         <Section title="Hero">
           <Text label="Location badge" value={content.hero.badge} onChange={(v) => update((d) => { d.hero.badge = v; })} />
           <Area label="Headline" value={content.hero.headline} onChange={(v) => update((d) => { d.hero.headline = v; })} />
@@ -91,6 +100,14 @@ export function AdminEditor({
               <Text label={`Caption ${i + 1} text`} value={cap.text} onChange={(v) => update((d) => { d.hero.captions[i].text = v; })} />
             </div>
           ))}
+          <ImageField
+            label="Hero photo"
+            src={content.hero.imageOverride.src}
+            alt={content.hero.imageOverride.alt}
+            onSrc={(v) => update((d) => { d.hero.imageOverride.src = v; })}
+            onAlt={(v) => update((d) => { d.hero.imageOverride.alt = v; })}
+            onClear={() => update((d) => { d.hero.imageOverride = { src: "", alt: "" }; })}
+          />
         </Section>
 
         <Section title="Proof signals (marquee chips)">
@@ -138,6 +155,14 @@ export function AdminEditor({
           {content.proof.points.map((point, i) => (
             <Text key={i} label={`Point ${i + 1}`} value={point} onChange={(v) => update((d) => { d.proof.points[i] = v; })} />
           ))}
+          <ImageField
+            label="Why-us photo"
+            src={content.proof.imageOverride.src}
+            alt={content.proof.imageOverride.alt}
+            onSrc={(v) => update((d) => { d.proof.imageOverride.src = v; })}
+            onAlt={(v) => update((d) => { d.proof.imageOverride.alt = v; })}
+            onClear={() => update((d) => { d.proof.imageOverride = { src: "", alt: "" }; })}
+          />
         </Section>
 
         <Section title="Feature spotlights">
@@ -207,6 +232,97 @@ export function AdminEditor({
           <span className="text-sm font-semibold text-red-700">{status.message}</span>
         )}
       </div>
+    </div>
+  );
+}
+
+function ImageField({
+  label,
+  src,
+  alt,
+  onSrc,
+  onAlt,
+  onClear,
+}: {
+  label: string;
+  src: string;
+  alt?: string;
+  onSrc: (url: string) => void;
+  onAlt?: (v: string) => void;
+  onClear?: () => void;
+}) {
+  const [uploading, setUploading] = useState(false);
+  const [error, setError] = useState("");
+
+  async function handleFile(event: React.ChangeEvent<HTMLInputElement>) {
+    const file = event.target.files?.[0];
+    if (!file) return;
+    setUploading(true);
+    setError("");
+    try {
+      const body = new FormData();
+      body.append("file", file);
+      const res = await fetch("/api/admin/media", { method: "POST", body });
+      const data = (await res.json()) as { url?: string; message?: string };
+      if (res.ok && data.url) {
+        onSrc(data.url);
+      } else {
+        setError(data.message ?? "Upload failed.");
+      }
+    } catch {
+      setError("Upload failed. Please try again.");
+    } finally {
+      setUploading(false);
+      event.target.value = "";
+    }
+  }
+
+  return (
+    <div className="grid gap-3 rounded-md border border-neutral-200 p-4">
+      <p className="text-sm font-semibold text-neutral-900">{label}</p>
+      {src ? (
+        // eslint-disable-next-line @next/next/no-img-element
+        <img
+          src={src}
+          alt=""
+          className="h-24 w-auto rounded border border-neutral-300 bg-neutral-100 object-contain"
+        />
+      ) : (
+        <p className="text-xs text-neutral-500">Using the built-in default.</p>
+      )}
+      <div className="flex flex-wrap items-center gap-3">
+        <label className="cursor-pointer rounded-md bg-neutral-950 px-3 py-2 text-xs font-black uppercase tracking-wide text-white transition hover:bg-neutral-800">
+          {uploading ? "Uploading…" : src ? "Replace" : "Upload"}
+          <input
+            type="file"
+            accept="image/png,image/jpeg,image/webp,image/gif,image/svg+xml"
+            className="hidden"
+            onChange={handleFile}
+            disabled={uploading}
+          />
+        </label>
+        {src && onClear && (
+          <button
+            type="button"
+            onClick={onClear}
+            className="text-xs font-bold uppercase tracking-wide text-neutral-600 transition hover:text-red-700"
+          >
+            Use default
+          </button>
+        )}
+      </div>
+      {onAlt && src && (
+        <label className="grid gap-1.5 text-sm font-semibold text-neutral-900">
+          Alt text (describe the image for screen readers &amp; SEO)
+          <input
+            type="text"
+            value={alt ?? ""}
+            onChange={(e) => onAlt(e.target.value)}
+            className="h-11 rounded-md border border-neutral-300 bg-white px-3 text-base font-normal text-neutral-950 outline-none transition focus:border-neutral-950 focus:ring-4 focus:ring-amber-200"
+          />
+        </label>
+      )}
+      {error && <p className="text-xs font-semibold text-red-700">{error}</p>}
     </div>
   );
 }

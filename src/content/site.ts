@@ -6,6 +6,9 @@ export type CtaLink = { label: string; href: string };
 export type ServiceItem = { key: string; title: string; text: string };
 export type FaqItem = { question: string; answer: string };
 export type Caption = { kicker: string; text: string };
+// An uploaded image that overrides a built-in photo. Empty src => keep the
+// default (which retains its webp/jpg <picture> fallback).
+export type ImageRef = { src: string; alt: string };
 export type SpotlightItem = {
   key: string;
   eyebrow: string;
@@ -15,6 +18,9 @@ export type SpotlightItem = {
 };
 
 export type SiteContent = {
+  branding: {
+    logo: string;
+  };
   hero: {
     badge: string;
     headline: string;
@@ -23,6 +29,7 @@ export type SiteContent = {
     secondaryCta: CtaLink;
     cornerNote: string;
     captions: Caption[];
+    imageOverride: ImageRef;
   };
   proofSignals: string[];
   intro: {
@@ -47,6 +54,7 @@ export type SiteContent = {
     intro: string;
     note: string;
     points: string[];
+    imageOverride: ImageRef;
   };
   spotlights: {
     items: SpotlightItem[];
@@ -79,6 +87,9 @@ export type SiteContent = {
 };
 
 export const siteContent: SiteContent = {
+  branding: {
+    logo: "",
+  },
   hero: {
     badge: "Fieldsboro / Bordentown / Philadelphia / Princeton",
     headline: "Work with the gear. Leave with the confidence.",
@@ -97,6 +108,7 @@ export const siteContent: SiteContent = {
         text: "One team, from first plan to final install.",
       },
     ],
+    imageOverride: { src: "", alt: "" },
   },
   proofSignals: [
     "Free 1-hour consult",
@@ -174,6 +186,7 @@ export const siteContent: SiteContent = {
       "Local installs across the NJ + PA corridor",
       "Every project starts with a free consult",
     ],
+    imageOverride: { src: "", alt: "" },
   },
   spotlights: {
     items: [
