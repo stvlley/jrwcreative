@@ -11,10 +11,10 @@ type Status =
 
 export function AdminEditor({
   initial,
-  storeConfigured,
+  storePath,
 }: {
   initial: SiteContent;
-  storeConfigured: boolean;
+  storePath: string;
 }) {
   const [content, setContent] = useState<SiteContent>(initial);
   const [status, setStatus] = useState<Status>({ kind: "idle" });
@@ -68,12 +68,10 @@ export function AdminEditor({
         </button>
       </header>
 
-      {!storeConfigured && (
-        <p className="mb-6 rounded-md border border-amber-400 bg-amber-50 px-4 py-3 text-sm font-medium text-amber-900">
-          Content store not configured. Set <code>BLOB_READ_WRITE_TOKEN</code> in the Vercel
-          project so saves can persist. Until then, edits here cannot be saved.
-        </p>
-      )}
+      <p className="mb-6 rounded-md border border-neutral-300 bg-white px-4 py-3 text-sm text-neutral-600">
+        Saved to <code className="font-mono text-neutral-900">{storePath}</code>. Make sure a
+        persistent volume is mounted there, or edits are lost when the app redeploys.
+      </p>
 
       <div className="space-y-10">
         <Section title="Hero">

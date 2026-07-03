@@ -26,7 +26,8 @@ graphify-out/
 .env.*
 !.env.example
 
-# Local CMS content (dev fallback; prod uses Vercel Blob)
+# CMS content store (lives on a persistent volume in prod)
+/data/
 .cms-content.json
 
 # The user's global gitignore ignores any `lib/` dir — keep this project's source lib tracked

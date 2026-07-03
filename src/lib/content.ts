@@ -1,6 +1,5 @@
 import { promises as fs } from "node:fs";
 import path from "node:path";
-import { list, put } from "@vercel/blob";
 import { revalidatePath } from "next/cache";
 import {
   siteContent as defaultContent,
@@ -12,50 +11,22 @@ import {
   type SpotlightItem,
 } from "@/content/site";
 
-// One JSON document holds all editable site copy.
-const CONTENT_KEY = "content.json";
-// Local dev fallback file (Vercel's runtime FS is read-only, so prod uses Blob).
-const LOCAL_PATH = path.join(process.cwd(), ".cms-content.json");
-
-function blobToken() {
-  return process.env.BLOB_READ_WRITE_TOKEN;
-}
-
-function isProd() {
-  return process.env.NODE_ENV === "production";
-}
+// All editable copy lives in one JSON document on disk. On Coolify (or any
+// container host) mount a PERSISTENT VOLUME at CONTENT_DIR so edits survive
+// redeploys — the container's own filesystem is ephemeral.
+const DATA_DIR = process.env.CONTENT_DIR || path.join(process.cwd(), "data");
+const CONTENT_PATH = path.join(DATA_DIR, "content.json");
 
 /**
- * Read the live site content. Uses Vercel Blob when configured, a local JSON
- * file in dev, and falls back to the in-repo defaults when nothing is stored or
- * the document is unreadable — so the public site always renders.
+ * Read the live site content from disk, falling back to the in-repo defaults
+ * when nothing has been saved yet or the document is unreadable — so the public
+ * site always renders. Reads are live (the home route is dynamic).
  */
 export async function getContent(): Promise<SiteContent> {
-  const token = blobToken();
-
-  if (!token) {
-    // Dev/local fallback: read the on-disk document if it exists.
-    try {
-      const raw = await fs.readFile(LOCAL_PATH, "utf8");
-      return normalizeContent(JSON.parse(raw));
-    } catch {
-      return defaultContent;
-    }
-  }
-
   try {
-    const { blobs } = await list({ prefix: CONTENT_KEY, limit: 1, token });
-    const blob = blobs.find((b) => b.pathname === CONTENT_KEY);
-    if (!blob) return defaultContent;
-
-    // Read live each request (the home route is already dynamic). The cache-bust
-    // query bypasses the Blob CDN edge cache so a save is visible immediately
-    // (read-your-own-writes), not after the blob's cache-control window.
-    const res = await fetch(`${blob.url}?_=${Date.now()}`, { cache: "no-store" });
-    if (!res.ok) return defaultContent;
-
+    const raw = await fs.readFile(CONTENT_PATH, "utf8");
     // Normalize so a partial/legacy document never drops sections.
-    return normalizeContent(await res.json());
+    return normalizeContent(JSON.parse(raw));
   } catch {
     return defaultContent;
   }
@@ -63,33 +34,15 @@ export async function getContent(): Promise<SiteContent> {
 
 /** Persist edited content and make the public site reflect it immediately. */
 export async function saveContent(next: SiteContent): Promise<void> {
-  const token = blobToken();
-
-  if (token) {
-    await put(CONTENT_KEY, JSON.stringify(next, null, 2), {
-      access: "public",
-      token,
-      contentType: "application/json",
-      addRandomSuffix: false,
-      allowOverwrite: true,
-      // Minimum allowed (60s). Reads also cache-bust, so edits surface immediately;
-      // this just keeps the blob's own CDN window short as a backstop.
-      cacheControlMaxAge: 60,
-    });
-  } else if (!isProd()) {
-    // Local dev: persist to disk so the edit→save→see-it-change loop works.
-    await fs.writeFile(LOCAL_PATH, JSON.stringify(next, null, 2), "utf8");
-  } else {
-    throw new Error("Content store is not configured (BLOB_READ_WRITE_TOKEN missing).");
-  }
-
+  await fs.mkdir(DATA_DIR, { recursive: true });
+  await fs.writeFile(CONTENT_PATH, JSON.stringify(next, null, 2), "utf8");
   // The home route reads live, but purge its render cache as a safeguard.
   revalidatePath("/");
 }
 
-/** True when saves will persist (Blob in prod, local file in dev). */
-export function isContentStoreConfigured() {
-  return Boolean(blobToken()) || !isProd();
+/** Where content is stored — surfaced in the admin UI as a persistence reminder. */
+export function contentStorePath() {
+  return CONTENT_PATH;
 }
 
 // --- Validation ---------------------------------------------------------

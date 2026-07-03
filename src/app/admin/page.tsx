@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { redirect } from "next/navigation";
 import { AdminEditor } from "@/components/admin-editor";
 import { isAuthed } from "@/lib/auth";
-import { getContent, isContentStoreConfigured } from "@/lib/content";
+import { contentStorePath, getContent } from "@/lib/content";
 
 export const metadata: Metadata = {
   title: "Content admin",
@@ -21,7 +21,7 @@ export default async function AdminPage() {
 
   return (
     <main className="min-h-screen bg-[#f7f2ea] text-neutral-950">
-      <AdminEditor initial={content} storeConfigured={isContentStoreConfigured()} />
+      <AdminEditor initial={content} storePath={contentStorePath()} />
     </main>
   );
 }
