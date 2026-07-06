@@ -1,7 +1,14 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import type { SiteContent } from "@/content/site";
+
+// Unsaved edits are mirrored to the browser so a refresh, closed tab, or crash
+// never loses in-progress work. This is a local draft only — nothing is public
+// until "Save & publish" writes it to the server.
+const DRAFT_KEY = "jrw-admin-draft";
+const sameContent = (a: SiteContent, b: SiteContent) =>
+  JSON.stringify(a) === JSON.stringify(b);
 
 type Status =
   | { kind: "idle" }
@@ -18,6 +25,59 @@ export function AdminEditor({
 }) {
   const [content, setContent] = useState<SiteContent>(initial);
   const [status, setStatus] = useState<Status>({ kind: "idle" });
+  // The last-published content this session — what a draft is compared against.
+  // Starts at the server value and advances on each successful save.
+  const [baseline, setBaseline] = useState<SiteContent>(initial);
+  const [restoredAt, setRestoredAt] = useState<string | null>(null);
+  const skipFirstPersist = useRef(true);
+
+  // On mount, restore an unsaved draft from a previous visit — unless it already
+  // matches what's live (nothing to recover).
+  useEffect(() => {
+    try {
+      const raw = window.localStorage.getItem(DRAFT_KEY);
+      if (!raw) return;
+      const parsed = JSON.parse(raw) as { savedAt?: string; content?: SiteContent };
+      if (parsed?.content && !sameContent(parsed.content, initial)) {
+        // Post-mount restore from browser storage is the canonical use of
+        // setState-in-effect: reading it during render would break hydration.
+        // eslint-disable-next-line react-hooks/set-state-in-effect
+        setContent(parsed.content);
+        setRestoredAt(parsed.savedAt ?? "");
+      } else {
+        window.localStorage.removeItem(DRAFT_KEY);
+      }
+    } catch {
+      // Corrupt/blocked storage — just fall back to the live content.
+    }
+    // Runs once on mount; `initial` is the server value for this page load.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  // Mirror every edit to local storage; clear it once edits match what's live.
+  useEffect(() => {
+    if (skipFirstPersist.current) {
+      skipFirstPersist.current = false;
+      return;
+    }
+    try {
+      if (sameContent(content, baseline)) {
+        window.localStorage.removeItem(DRAFT_KEY);
+      } else {
+        window.localStorage.setItem(
+          DRAFT_KEY,
+          JSON.stringify({ savedAt: new Date().toISOString(), content }),
+        );
+      }
+    } catch {
+      // Storage full or blocked — editing still works, just without recovery.
+    }
+  }, [content, baseline]);
+
+  function discardDraft() {
+    setContent(baseline);
+    setRestoredAt(null);
+  }
 
   function update(mutator: (draft: SiteContent) => void) {
     setContent((prev) => {
@@ -42,6 +102,9 @@ export function AdminEditor({
         return;
       }
       setStatus({ kind: "saved", message: data.message ?? "Saved." });
+      // Published — this is now the live baseline, so the local draft is cleared.
+      setBaseline(content);
+      setRestoredAt(null);
     } catch {
       setStatus({ kind: "error", message: "Network error. Please try again." });
     }
@@ -72,6 +135,22 @@ export function AdminEditor({
         Saved to <code className="font-mono text-neutral-900">{storePath}</code>. Make sure a
         persistent volume is mounted there, or edits are lost when the app redeploys.
       </p>
+
+      {restoredAt !== null && (
+        <div className="mb-6 flex flex-wrap items-center justify-between gap-3 rounded-md border border-amber-400 bg-amber-50 px-4 py-3 text-sm text-amber-900">
+          <span>
+            Restored unsaved edits{restoredAt ? ` from ${new Date(restoredAt).toLocaleString()}` : ""}.
+            Review them and press <strong>Save &amp; publish</strong>, or discard to return to the live site.
+          </span>
+          <button
+            type="button"
+            onClick={discardDraft}
+            className="rounded-md border border-amber-400 px-3 py-1.5 text-xs font-bold uppercase tracking-wide text-amber-900 transition hover:bg-amber-100"
+          >
+            Discard
+          </button>
+        </div>
+      )}
 
       <div className="space-y-10">
         <Section title="Branding">

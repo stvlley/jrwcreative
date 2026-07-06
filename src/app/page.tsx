@@ -38,6 +38,11 @@ const navItems: [string, string][] = [
   ["Contact", "#contact"],
 ];
 
+// The home page renders live CMS content read from disk. Without this it would
+// be statically prerendered at build time and keep serving the in-repo default
+// copy — so admin edits appear to "revert" on the public site.
+export const dynamic = "force-dynamic";
+
 export default async function Home() {
   const content = await getContent();
   const { branding, hero, proofSignals, intro, approach, consulting, proof, spotlights, cta, faq, contact, footer } =
