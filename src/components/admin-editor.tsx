@@ -214,6 +214,10 @@ export function AdminEditor({
         <Section title="Footer">
           <Text label="Legal / copyright line" value={content.footer.legalLine} onChange={(v) => update((d) => { d.footer.legalLine = v; })} />
         </Section>
+
+        <Section title="Admin password">
+          <PasswordForm />
+        </Section>
       </div>
 
       <div className="sticky bottom-0 mt-10 flex flex-wrap items-center gap-4 border-t border-neutral-300 bg-white/95 py-4 backdrop-blur">
@@ -324,6 +328,103 @@ function ImageField({
       )}
       {error && <p className="text-xs font-semibold text-red-700">{error}</p>}
     </div>
+  );
+}
+
+function PasswordForm() {
+  const [current, setCurrent] = useState("");
+  const [next, setNext] = useState("");
+  const [confirm, setConfirm] = useState("");
+  const [busy, setBusy] = useState(false);
+  const [result, setResult] = useState<{ ok: boolean; message: string } | null>(null);
+
+  async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    setResult(null);
+    if (next !== confirm) {
+      setResult({ ok: false, message: "New passwords do not match." });
+      return;
+    }
+    setBusy(true);
+    try {
+      const res = await fetch("/api/admin/password", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ currentPassword: current, newPassword: next }),
+      });
+      const data = (await res.json()) as { message?: string };
+      if (res.ok) {
+        setResult({ ok: true, message: data.message ?? "Password updated." });
+        setCurrent("");
+        setNext("");
+        setConfirm("");
+      } else {
+        setResult({ ok: false, message: data.message ?? "Could not update the password." });
+      }
+    } catch {
+      setResult({ ok: false, message: "Network error. Please try again." });
+    } finally {
+      setBusy(false);
+    }
+  }
+
+  return (
+    <form onSubmit={handleSubmit} className="grid gap-4 rounded-md border border-neutral-200 p-4">
+      <p className="text-sm text-neutral-600">
+        Change the password used to sign in at <code className="font-mono">/admin</code>. It takes
+        effect on your next sign-in; this session stays open.
+      </p>
+      <PasswordInput label="Current password" value={current} autoComplete="current-password" onChange={setCurrent} />
+      <div className="grid gap-4 sm:grid-cols-2">
+        <PasswordInput label="New password (min. 8 characters)" value={next} autoComplete="new-password" minLength={8} onChange={setNext} />
+        <PasswordInput label="Confirm new password" value={confirm} autoComplete="new-password" minLength={8} onChange={setConfirm} />
+      </div>
+      <div className="flex flex-wrap items-center gap-4">
+        <button
+          type="submit"
+          disabled={busy}
+          className="rounded-md bg-neutral-950 px-4 py-2.5 text-xs font-black uppercase tracking-wide text-white transition hover:bg-neutral-800 disabled:cursor-not-allowed disabled:bg-neutral-500"
+        >
+          {busy ? "Updating…" : "Update password"}
+        </button>
+        {result && (
+          <span
+            className={`text-sm font-semibold ${result.ok ? "text-emerald-700" : "text-red-700"}`}
+          >
+            {result.message}
+          </span>
+        )}
+      </div>
+    </form>
+  );
+}
+
+function PasswordInput({
+  label,
+  value,
+  autoComplete,
+  minLength,
+  onChange,
+}: {
+  label: string;
+  value: string;
+  autoComplete: string;
+  minLength?: number;
+  onChange: (v: string) => void;
+}) {
+  return (
+    <label className="grid gap-1.5 text-sm font-semibold text-neutral-900">
+      {label}
+      <input
+        type="password"
+        value={value}
+        autoComplete={autoComplete}
+        minLength={minLength}
+        required
+        onChange={(e) => onChange(e.target.value)}
+        className="h-11 rounded-md border border-neutral-300 bg-white px-3 text-base font-normal text-neutral-950 outline-none transition focus:border-neutral-950 focus:ring-4 focus:ring-amber-200"
+      />
+    </label>
   );
 }
 
