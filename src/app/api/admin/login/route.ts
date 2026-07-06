@@ -12,7 +12,7 @@ export async function POST(request: Request) {
 
   let ok = false;
   try {
-    ok = checkPassword(password);
+    ok = await checkPassword(password);
   } catch {
     return NextResponse.json(
       { message: "Admin login is not configured." },
